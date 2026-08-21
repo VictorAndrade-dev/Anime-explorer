@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Anime Explorer</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="container header-content">
+
+            <a href="#" class="logo">
+                🎌 Anime Explorer
+            </a>
+
+            <nav class="nav">
+                <a href="#inicio">Início</a>
+                <a href="#populares">Populares</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- Hero / Pesquisa -->
+        <section id="inicio" class="hero">
+
+            <div class="container hero-content">
+
+                <span class="hero-tag">🎌 ANIME EXPLORER</span>
+
+                <h1>
+                    Explore o mundo dos
+                    <span>animes</span>
+                </h1>
+
+                <p>
+                    Pesquise seus animes favoritos e descubra
+                    informações, avaliações, personagens e muito mais.
+                </p>
+
+                <!-- Campo de pesquisa -->
+                <form id="search-form" class="search-box">
+
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Digite o nome de um anime..."
+                        autocomplete="off"
+                    >
+
+                    <button type="submit" id="search-button">
+                        🔎 Pesquisar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- Resultados da pesquisa -->
+        <section class="results-section">
+
+            <div class="container">
+
+                <div class="section-header">
+                    <h2>Resultados</h2>
+                    <span id="results-count"></span>
+                </div>
+
+                <!-- Mensagem inicial -->
+                <div id="initial-message" class="message">
+                    <span>🔎</span>
+                    <h3>Pesquise por um anime</h3>
+                    <p>
+                        Digite o nome de um anime acima para começar.
+                    </p>
+                </div>
+
+                <!-- Loading -->
+                <div id="loading" class="message hidden">
+                    <span>⏳</span>
+                    <h3>Buscando animes...</h3>
+                    <p>Aguarde enquanto consultamos a API.</p>
+                </div>
+
+                <!-- Mensagem de erro -->
+                <div id="error-message" class="message hidden">
+                    <span>😕</span>
+                    <h3>Não encontramos resultados</h3>
+                    <p id="error-text">
+                        Tente pesquisar por outro anime.
+                    </p>
+                </div>
+
+                <!-- Cards -->
+                <div id="anime-list" class="anime-grid"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Animes populares -->
+        <section id="populares" class="popular-section">
+
+            <div class="container">
+
+                <div class="section-header">
+                    <div>
+                        <span class="section-tag">🔥 EM ALTA</span>
+                        <h2>Animes populares</h2>
+                    </div>
+
+                    <button id="random-button" class="random-button">
+                        🎲 Anime aleatório
+                    </button>
+                </div>
+
+                <div id="popular-list" class="anime-grid">
+                    <!-- Será preenchido pelo JavaScript -->
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Modal de detalhes -->
+    <div id="anime-modal" class="modal hidden">
+
+        <div class="modal-overlay"></div>
+
+        <div class="modal-content">
+
+            <button id="close-modal" class="close-modal">
+                ✕
+            </button>
+
+            <div id="modal-body">
+                <!-- Informações inseridas pelo JavaScript -->
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Rodapé -->
+    <footer class="footer">
+
+        <div class="container">
+
+            <p>
+                🎌 Anime Explorer
+            </p>
+
+            <p>
+                Projeto acadêmico desenvolvido com HTML, CSS e JavaScript.
+            </p>
+
+            <small>
+                Dados fornecidos pela Jikan API.
+            </small>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
