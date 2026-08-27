@@ -2,8 +2,15 @@
 // CONFIGURAÇÃO DA API
 // ============================================
 
-// URL base da Kitsu API.
+// URL principal da Kitsu API.
+// A API retorna os dados dos animes no formato JSON.
 const API_URL = "https://kitsu.io/api/edge/anime";
+
+// Quantidade de animes exibidos em uma pesquisa.
+const SEARCH_LIMIT = 12;
+
+// Quantidade de animes exibidos na seção "Populares".
+const POPULAR_LIMIT = 6;
 
 
 // ============================================
@@ -16,6 +23,7 @@ const API_URL = "https://kitsu.io/api/edge/anime";
 
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
+const searchButton = document.getElementById("search-button");
 
 const animeList = document.getElementById("anime-list");
 const resultsCount = document.getElementById("results-count");
@@ -37,14 +45,14 @@ const popularList = document.getElementById("popular-list");
 // EVENTO DO FORMULÁRIO
 // ============================================
 
-// Detecta quando o usuário envia a pesquisa.
+// Detecta quando o usuário envia uma pesquisa.
 searchForm.addEventListener("submit", function (event) {
 
     // Impede o navegador de recarregar a página.
     event.preventDefault();
 
     // Pegamos o texto digitado pelo usuário.
-    // trim() remove espaços desnecessários.
+    // trim() remove espaços desnecessários no início e no fim.
     const searchTerm = searchInput.value.trim();
 
     // Verificamos se o campo está vazio.
@@ -75,28 +83,32 @@ async function searchAnime(searchTerm) {
     // Mostramos a mensagem de carregamento.
     showLoading();
 
+    // Desabilitamos o botão enquanto a requisição acontece.
+    searchButton.disabled = true;
+
     try {
 
         // encodeURIComponent transforma o texto pesquisado
-        // em um formato seguro para colocar na URL.
+        // em um formato seguro para ser utilizado na URL.
         const encodedSearch = encodeURIComponent(searchTerm);
 
-        // Montamos a URL da API.
+        // Montamos a URL da API utilizando o filtro de texto.
         const url =
-            `${API_URL}?filter[text]=${encodedSearch}&page[limit]=12`;
+            `${API_URL}?filter[text]=${encodedSearch}&page[limit]=${SEARCH_LIMIT}`;
 
 
         // ============================================
         // FETCH
         // ============================================
 
-        // fetch() faz a requisição para a API.
+        // fetch() realiza a requisição para a API.
         //
-        // await faz o JavaScript esperar a resposta.
+        // await faz o JavaScript esperar a resposta
+        // antes de continuar a execução.
         const response = await fetch(url);
 
 
-        // Verificamos se a resposta foi bem-sucedida.
+        // Verificamos se a resposta HTTP foi bem-sucedida.
         if (!response.ok) {
 
             throw new Error(
@@ -109,7 +121,10 @@ async function searchAnime(searchTerm) {
         // JSON
         // ============================================
 
-        // Convertemos a resposta da API para JSON.
+        // A API retorna os dados no formato JSON.
+        //
+        // response.json() converte essa resposta
+        // para um objeto que pode ser manipulado pelo JavaScript.
         const data = await response.json();
 
 
@@ -117,6 +132,7 @@ async function searchAnime(searchTerm) {
         // VERIFICAR RESULTADOS
         // ============================================
 
+        // Verificamos se a API retornou dados.
         if (!data.data || data.data.length === 0) {
 
             showError(
@@ -127,47 +143,58 @@ async function searchAnime(searchTerm) {
         }
 
 
-        // Escondemos as mensagens.
+        // Escondemos as mensagens de carregamento e erro.
         hideMessages();
 
 
-        // Mostramos a quantidade de resultados.
+        // Mostramos a quantidade de resultados encontrados.
         resultsCount.textContent =
             `${data.data.length} resultado(s)`;
 
 
-        // Percorremos todos os animes encontrados.
+        // Percorremos todos os animes retornados pela API.
         data.data.forEach(function (anime) {
 
-            // Criamos o card.
+            // Criamos um card para cada anime.
             const card = createAnimeCard(anime);
 
             // Adicionamos o card à página.
             animeList.appendChild(card);
         });
 
+
     } catch (error) {
 
+        // Mostramos o erro no console para facilitar
+        // a identificação de problemas durante o desenvolvimento.
         console.error("Erro na pesquisa:", error);
 
+        // Mostramos uma mensagem amigável para o usuário.
         showError(
             "Não foi possível consultar os animes. " +
-            "Tente novamente."
+            "Verifique sua conexão e tente novamente."
         );
+
+    } finally {
+
+        // Independentemente de sucesso ou erro,
+        // o botão volta a ficar disponível.
+        searchButton.disabled = false;
     }
 }
 
 
 // ============================================
-// CRIAR CARD
+// CRIAR CARD DO ANIME
 // ============================================
 
 function createAnimeCard(anime) {
 
-    // Criamos um elemento HTML <article>.
+    // Criamos um elemento <article> para representar
+    // o card do anime.
     const card = document.createElement("article");
 
-    // Adicionamos a classe CSS.
+    // Adicionamos a classe CSS responsável pelo visual.
     card.classList.add("anime-card");
 
 
@@ -177,10 +204,12 @@ function createAnimeCard(anime) {
 
     // Os dados principais do anime ficam dentro
     // do objeto "attributes".
-    const attributes = anime.attributes;
+    const attributes = anime.attributes || {};
 
 
-    // Título principal.
+    // Título do anime.
+    // Utilizamos diferentes opções caso algum título
+    // não esteja disponível.
     const title =
         attributes.titles?.en ||
         attributes.titles?.en_jp ||
@@ -189,6 +218,7 @@ function createAnimeCard(anime) {
 
 
     // Imagem da capa.
+    // A API oferece diferentes tamanhos de imagem.
     const image =
         attributes.posterImage?.large ||
         attributes.posterImage?.medium ||
@@ -197,22 +227,32 @@ function createAnimeCard(anime) {
 
     // Nota do anime.
     const score =
-        attributes.averageRating ||
-        "N/A";
+        attributes.averageRating ?? "N/A";
 
 
     // Quantidade de episódios.
     const episodes =
-        attributes.episodeCount ||
-        "N/A";
+        attributes.episodeCount ?? "N/A";
 
 
     // Data de lançamento.
+    // Extraímos somente o ano da data completa.
     const releaseDate =
         attributes.startDate
-            ? new Date(attributes.startDate)
-                .getFullYear()
+            ? new Date(attributes.startDate).getFullYear()
             : "N/A";
+
+
+    // Tipo do anime.
+    const type =
+        attributes.subtype ||
+        "N/A";
+
+
+    // Status do anime.
+    const status =
+        attributes.status ||
+        "N/A";
 
 
     // ============================================
@@ -256,7 +296,20 @@ function createAnimeCard(anime) {
             </div>
 
 
-            <button class="details-button">
+            <div class="anime-tags">
+
+                <span class="anime-tag">
+                    ${type}
+                </span>
+
+                <span class="anime-tag">
+                    ${status}
+                </span>
+
+            </div>
+
+
+            <button class="details-button" type="button">
                 Ver detalhes
             </button>
 
@@ -268,10 +321,13 @@ function createAnimeCard(anime) {
     // BOTÃO DE DETALHES
     // ============================================
 
+    // Encontramos o botão criado dentro do card.
     const detailsButton =
         card.querySelector(".details-button");
 
 
+    // Quando o usuário clicar,
+    // abrimos o modal com os detalhes daquele anime.
     detailsButton.addEventListener(
         "click",
         function () {
@@ -293,8 +349,13 @@ function createAnimeCard(anime) {
 
 function openAnimeModal(anime) {
 
-    const attributes = anime.attributes;
+    // Pegamos os atributos do anime.
+    const attributes = anime.attributes || {};
 
+
+    // ============================================
+    // DADOS
+    // ============================================
 
     // Título.
     const title =
@@ -319,14 +380,12 @@ function openAnimeModal(anime) {
 
     // Nota.
     const score =
-        attributes.averageRating ||
-        "N/A";
+        attributes.averageRating ?? "N/A";
 
 
     // Episódios.
     const episodes =
-        attributes.episodeCount ||
-        "N/A";
+        attributes.episodeCount ?? "N/A";
 
 
     // Status.
@@ -344,8 +403,7 @@ function openAnimeModal(anime) {
     // Data.
     const releaseDate =
         attributes.startDate
-            ? new Date(attributes.startDate)
-                .getFullYear()
+            ? new Date(attributes.startDate).getFullYear()
             : "N/A";
 
 
@@ -411,6 +469,9 @@ function openAnimeModal(anime) {
 
     // Mostramos o modal.
     modal.classList.remove("hidden");
+
+    // Impedimos a página de rolar enquanto o modal está aberto.
+    document.body.style.overflow = "hidden";
 }
 
 
@@ -425,7 +486,7 @@ closeModalButton.addEventListener(
 );
 
 
-// Fundo do modal.
+// Fundo escuro do modal.
 document
     .querySelector(".modal-overlay")
     .addEventListener(
@@ -434,10 +495,13 @@ document
     );
 
 
-// Função para fechar.
+// Função responsável por fechar o modal.
 function closeModal() {
 
     modal.classList.add("hidden");
+
+    // Devolvemos a rolagem da página.
+    document.body.style.overflow = "";
 }
 
 
@@ -445,23 +509,27 @@ function closeModal() {
 // ANIMES POPULARES
 // ============================================
 
-// A Kitsu permite ordenar os animes pela
-// quantidade de favoritos.
+// A Kitsu permite ordenar os animes pela quantidade
+// de usuários que os adicionaram à biblioteca.
 //
-// Aqui carregamos alguns animes populares
-// quando a página abre.
+// Aqui buscamos os animes mais populares
+// quando a página é carregada.
 
 async function loadPopularAnime() {
 
     try {
 
+        // Montamos a URL para buscar os animes
+        // mais populares.
         const url =
-            `${API_URL}?sort=-userCount&page[limit]=6`;
+            `${API_URL}?sort=-userCount&page[limit]=${POPULAR_LIMIT}`;
 
 
+        // Fazemos a requisição para a API.
         const response = await fetch(url);
 
 
+        // Verificamos se houve algum problema HTTP.
         if (!response.ok) {
 
             throw new Error(
@@ -470,14 +538,24 @@ async function loadPopularAnime() {
         }
 
 
+        // Convertendo a resposta da API para JSON.
         const data = await response.json();
 
 
-        // Limpamos a área de populares.
+        // Verificamos se existem resultados.
+        if (!data.data || data.data.length === 0) {
+
+            throw new Error(
+                "Nenhum anime popular encontrado."
+            );
+        }
+
+
+        // Limpamos a área de animes populares.
         popularList.innerHTML = "";
 
 
-        // Criamos os cards.
+        // Criamos um card para cada anime.
         data.data.forEach(function (anime) {
 
             const card = createAnimeCard(anime);
@@ -488,11 +566,14 @@ async function loadPopularAnime() {
 
     } catch (error) {
 
+        // Registramos o erro no console.
         console.error(
             "Erro ao carregar populares:",
             error
         );
 
+
+        // Informamos o problema ao usuário.
         popularList.innerHTML = `
             <p>
                 Não foi possível carregar os animes populares.
@@ -506,26 +587,31 @@ async function loadPopularAnime() {
 // ANIME ALEATÓRIO
 // ============================================
 
-// A API não possui um endpoint específico de
-// "anime aleatório", então fazemos uma busca
-// usando uma página aleatória.
+// A API não possui um endpoint específico para
+// buscar um anime aleatório.
+//
+// Por isso, fazemos uma consulta ordenada por
+// popularidade e utilizamos um offset aleatório.
 
 async function loadRandomAnime() {
 
     try {
 
-        // Geramos uma página aleatória.
-        const randomPage =
-            Math.floor(Math.random() * 10) + 1;
+        // Escolhemos uma posição aleatória entre 0 e 49.
+        const randomOffset =
+            Math.floor(Math.random() * 50);
 
 
+        // Montamos a URL da requisição.
         const url =
-            `${API_URL}?sort=-userCount&page[limit]=1&page[offset]=${randomPage}`;
+            `${API_URL}?sort=-userCount&page[limit]=1&page[offset]=${randomOffset}`;
 
 
+        // Fazemos a requisição.
         const response = await fetch(url);
 
 
+        // Verificamos se a API respondeu corretamente.
         if (!response.ok) {
 
             throw new Error(
@@ -534,17 +620,27 @@ async function loadRandomAnime() {
         }
 
 
+        // Convertendo a resposta para JSON.
         const data = await response.json();
 
 
+        // Verificamos se recebemos um anime.
         if (data.data && data.data.length > 0) {
 
+            // Abrimos diretamente o modal.
             openAnimeModal(data.data[0]);
+
+        } else {
+
+            throw new Error(
+                "Nenhum anime aleatório encontrado."
+            );
         }
 
 
     } catch (error) {
 
+        // Registramos o erro no console.
         console.error(
             "Erro ao buscar anime aleatório:",
             error
@@ -557,6 +653,8 @@ async function loadRandomAnime() {
 // BOTÃO DE ANIME ALEATÓRIO
 // ============================================
 
+// Quando o usuário clicar no botão,
+// buscamos um anime aleatório.
 randomButton.addEventListener(
     "click",
     loadRandomAnime
@@ -589,7 +687,7 @@ function hideMessages() {
 }
 
 
-// Mostra mensagem de erro.
+// Mostra uma mensagem de erro.
 function showError(message) {
 
     initialMessage.classList.add("hidden");
@@ -608,7 +706,7 @@ function showError(message) {
 // TECLA ESC
 // ============================================
 
-// Permite fechar o modal pressionando ESC.
+// Permite fechar o modal pressionando a tecla ESC.
 
 document.addEventListener(
     "keydown",
