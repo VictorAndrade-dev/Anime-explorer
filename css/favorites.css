@@ -1,0 +1,34 @@
+/* ============================================
+   FAVORITOS
+   ============================================ */
+
+.favorites-section {
+    padding: 70px 0;
+}
+
+.favorites-header {
+    margin-bottom: 30px;
+}
+
+.favorites-header h2 {
+    font-size: 2rem;
+}
+
+.empty-favorites {
+    min-height: 200px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #88889c;
+}
+
+.empty-favorites span {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}

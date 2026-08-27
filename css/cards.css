@@ -1,0 +1,209 @@
+/* ============================================
+   GRID DE ANIMES
+   ============================================ */
+
+.anime-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(190px, 1fr));
+
+    gap: 25px;
+}
+
+/* ============================================
+   CARD
+   ============================================ */
+
+.anime-card {
+    overflow: hidden;
+
+    background: #17172a;
+
+    border: 1px solid #28283f;
+    border-radius: 12px;
+
+    transition:
+        transform 0.3s,
+        border-color 0.3s,
+        box-shadow 0.3s;
+}
+
+.anime-card:hover {
+    transform: translateY(-7px);
+
+    border-color: #7c3aed;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================
+   IMAGEM
+   ============================================ */
+
+.anime-image {
+    position: relative;
+
+    width: 100%;
+    aspect-ratio: 2 / 3;
+
+    overflow: hidden;
+
+    background: #202033;
+}
+
+.anime-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.4s;
+}
+
+.anime-card:hover .anime-image img {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   NOTA
+   ============================================ */
+
+.anime-score {
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    background: rgba(15, 15, 26, 0.9);
+
+    color: #facc15;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* ============================================
+   INFORMAÇÕES
+   ============================================ */
+
+.anime-info {
+    padding: 15px;
+}
+
+.anime-title {
+    font-size: 1rem;
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.anime-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    color: #9999aa;
+    font-size: 0.8rem;
+}
+
+/* ============================================
+   TAGS
+   ============================================ */
+
+.anime-tags {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-bottom: 12px;
+}
+
+.anime-tag {
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 5px;
+
+    background: #25253b;
+
+    color: #b9a5ff;
+
+    font-size: 0.7rem;
+}
+
+/* ============================================
+   BOTÃO DE DETALHES
+   ============================================ */
+
+.details-button {
+    width: 100%;
+
+    border: 1px solid #383852;
+    border-radius: 7px;
+
+    padding: 9px;
+
+    background: transparent;
+    color: #ddd;
+
+    transition: 0.3s;
+}
+
+.details-button:hover {
+    background: #7c3aed;
+
+    border-color: #7c3aed;
+
+    color: white;
+}
+
+/* ============================================
+   BOTÃO DE FAVORITO
+   ============================================ */
+
+.favorite-button {
+    width: 100%;
+
+    margin-top: 8px;
+
+    padding: 8px;
+
+    border: 1px solid #383852;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #ddd;
+
+    transition: 0.3s;
+}
+
+.favorite-button:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.favorite-button.favorited {
+    background: #ef4444;
+    border-color: #ef4444;
+
+    color: white;
+}

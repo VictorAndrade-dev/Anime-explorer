@@ -1,0 +1,99 @@
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 700px) {
+
+    .header-content {
+        height: 60px;
+    }
+
+    .nav {
+        gap: 15px;
+    }
+
+    .nav a {
+        font-size: 0.85rem;
+    }
+
+    .hero {
+        min-height: 450px;
+        padding: 60px 0;
+    }
+
+    .hero h1 {
+        font-size: 2.7rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    /* Pesquisa */
+
+    .search-box {
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .search-box button {
+        padding: 12px;
+    }
+
+    /* Cabeçalho das seções */
+
+    .section-header {
+        align-items: flex-start;
+
+        gap: 15px;
+
+        flex-direction: column;
+    }
+
+    /* Cards */
+
+    .anime-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 15px;
+    }
+
+    .anime-info {
+        padding: 12px;
+    }
+
+    .anime-title {
+        font-size: 0.9rem;
+    }
+
+    /* Modal */
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-anime {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-image {
+        width: 180px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    .nav a {
+        font-size: 0.75rem;
+    }
+
+    .anime-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

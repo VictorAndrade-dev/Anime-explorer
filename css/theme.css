@@ -1,0 +1,82 @@
+/* ============================================
+   TEMA CLARO
+   ============================================ */
+
+body.light-theme {
+    background: #f5f5f5;
+    color: #222;
+}
+
+body.light-theme .header {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #ddd;
+}
+
+body.light-theme .nav a {
+    color: #555;
+}
+
+body.light-theme .logo {
+    color: #222;
+}
+
+body.light-theme .hero {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(124, 58, 237, 0.12),
+            transparent 45%
+        );
+}
+
+body.light-theme .hero p {
+    color: #666;
+}
+
+body.light-theme .search-box {
+    background: #fff;
+    border-color: #ddd;
+}
+
+body.light-theme .search-box input {
+    color: #222;
+}
+
+body.light-theme .popular-section {
+    background: #eee;
+}
+
+body.light-theme .anime-card {
+    background: #fff;
+    border-color: #ddd;
+}
+
+body.light-theme .anime-title {
+    color: #222;
+}
+
+body.light-theme .anime-meta {
+    color: #666;
+}
+
+body.light-theme .anime-tag {
+    background: #eee;
+}
+
+body.light-theme .modal-content {
+    background: #fff;
+    border-color: #ddd;
+}
+
+body.light-theme .modal-synopsis {
+    color: #555;
+}
+
+body.light-theme .modal-details {
+    color: #333;
+}
+
+body.light-theme .footer {
+    background: #eaeaea;
+    border-color: #ddd;
+}
