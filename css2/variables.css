@@ -1,0 +1,70 @@
+/* ============================================
+   VARIÁVEIS - ANIME EXPLORER
+   ============================================ */
+
+:root {
+
+    /* ========================================
+       CORES PRINCIPAIS
+       ======================================== */
+
+    --color-background: #0f0f17;
+    --color-background-secondary: #151521;
+
+    --color-surface: #1b1b29;
+    --color-surface-hover: #252538;
+
+    --color-primary: #7c3aed;
+    --color-primary-light: #a78bfa;
+    --color-primary-hover: #6d28d9;
+
+    /* ========================================
+       TEXTOS
+       ======================================== */
+
+    --color-text: #f5f5f5;
+    --color-text-secondary: #b4b4c4;
+    --color-text-muted: #77778c;
+
+    /* ========================================
+       BORDAS
+       ======================================== */
+
+    --color-border: #2d2d42;
+
+    /* ========================================
+       ELEMENTOS DA INTERFACE
+       ======================================== */
+
+    --header-background: rgba(15, 15, 23, 0.9);
+
+    --hero-glow: rgba(124, 58, 237, 0.18);
+
+    --search-background: #191925;
+
+    --primary-shadow: rgba(124, 58, 237, 0.15);
+
+    --footer-background: #0b0b11;
+
+    /* ========================================
+       TAMANHOS
+       ======================================== */
+
+    --container-width: 1200px;
+    --container-padding: 90%;
+
+    /* ========================================
+       BORDAS
+       ======================================== */
+
+    --border-radius-small: 8px;
+    --border-radius-medium: 12px;
+    --border-radius-large: 16px;
+
+    /* ========================================
+       TRANSIÇÕES
+       ======================================== */
+
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}

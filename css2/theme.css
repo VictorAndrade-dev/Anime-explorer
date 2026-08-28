@@ -1,0 +1,47 @@
+/* ============================================
+   TEMA CLARO
+   ============================================ */
+
+body.light-theme {
+
+    /* ========================================
+       FUNDOS
+       ======================================== */
+
+    --color-background: #f5f5f7;
+    --color-background-secondary: #ededf1;
+
+    --color-surface: #ffffff;
+    --color-surface-hover: #f0f0f5;
+
+
+    /* ========================================
+       TEXTOS
+       ======================================== */
+
+    --color-text: #202024;
+    --color-text-secondary: #5f5f6b;
+    --color-text-muted: #858592;
+
+
+    /* ========================================
+       BORDAS
+       ======================================== */
+
+    --color-border: #dcdce3;
+
+
+    /* ========================================
+       INTERFACE
+       ======================================== */
+
+    --header-background: rgba(255, 255, 255, 0.9);
+
+    --search-background: #ffffff;
+
+    --footer-background: #e7e7ec;
+
+    --hero-glow: rgba(124, 58, 237, 0.10);
+
+    --primary-shadow: rgba(124, 58, 237, 0.12);
+}
