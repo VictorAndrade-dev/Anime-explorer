@@ -256,7 +256,8 @@ function createAnimeCard(anime) {
 
     favoriteButton.addEventListener(
         "click",
-        function () {
+        function (event) {
+            event.stopPropagation();
 
             toggleFavorite(anime);
         }
@@ -277,10 +278,9 @@ function createAnimeCard(anime) {
     const detailsButton =
         card.querySelector(".details-button");
 
-    detailsButton.addEventListener(
+        card.addEventListener(
         "click",
         function () {
-
             openAnimeModal(anime);
         }
     );
