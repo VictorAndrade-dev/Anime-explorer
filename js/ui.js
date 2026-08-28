@@ -621,144 +621,312 @@ function showError(message) {
 
 async function loadEpisodesView(
     animeId,
-    animeTitle
+    animeTitle,
+    offset = 0,
+    append = false
 ) {
 
-    modalBody.innerHTML = `
-
-        <div class="message">
-
-            <span>⏳</span>
-
-            <h3>
-                Carregando episódios...
-            </h3>
-
-            <p>
-                Aguarde enquanto buscamos os episódios.
-            </p>
-
-        </div>
-    `;
-
+    /*
+     * Primeira abertura:
+     * mostra o carregamento normalmente.
+     */
+    if (!append) {
+        modalBody.innerHTML = `
+            <div class="message">
+                <span>⏳</span>
+                <h3>Carregando episódios...</h3>
+                <p>
+                    Aguarde enquanto buscamos os episódios.
+                </p>
+            </div>
+        `;
+    }
 
     try {
 
-        const episodes =
-            await getEpisodes(animeId);
+        const result = await getEpisodes(
+            animeId,
+            offset,
+            20
+        );
 
+        const episodes = result.episodes;
+        const nextUrl = result.next;
 
+        /*
+         * Nenhum episódio encontrado.
+         */
         if (!episodes || episodes.length === 0) {
 
-            modalBody.innerHTML = `
+            if (!append) {
+                modalBody.innerHTML = `
+                    <div class="message">
+                        <span>📺</span>
 
-                <div class="message">
+                        <h3>
+                            Nenhum episódio encontrado
+                        </h3>
 
-                    <span>📺</span>
-
-                    <h3>
-                        Nenhum episódio encontrado
-                    </h3>
-
-                    <p>
-                        Não existem episódios disponíveis.
-                    </p>
-
-                </div>
-            `;
+                        <p>
+                            Não existem episódios disponíveis.
+                        </p>
+                    </div>
+                `;
+            }
 
             return;
         }
 
+        /*
+         * Cria os cards dos episódios.
+         */
+        const episodesHTML = episodes.map(
+            function (episode, index) {
 
-        const episodesHTML =
-            episodes.map(
-                function (episode, index) {
+                const attributes =
+                    episode.attributes || {};
 
-                    const attributes =
-                        episode.attributes || {};
+                const number =
+                    attributes.number ||
+                    offset + index + 1;
 
-                    const number =
-                        attributes.number ||
-                        index + 1;
+                const episodeTitle =
+                    attributes.titles?.pt_br ||
+                    attributes.titles?.pt ||
+                    attributes.titles?.en ||
+                    attributes.canonicalTitle ||
+                    "Título não disponível";
 
-                    const episodeTitle =
-                        attributes.titles?.en ||
-                        attributes.canonicalTitle ||
-                        "Título não disponível";
+                const airDate =
+                    attributes.airdate
+                        ? new Date(
+                            attributes.airdate
+                        ).toLocaleDateString(
+                            "pt-BR"
+                        )
+                        : "Data não disponível";
 
-                    const airDate =
-                        attributes.airdate
-                            ? new Date(
-                                attributes.airdate
-                            ).toLocaleDateString(
-                                "pt-BR"
-                            )
-                            : "Data não disponível";
+                const length =
+                    attributes.length
+                        ? `${attributes.length} min`
+                        : "Duração não disponível";
 
+                return `
+                    <article class="episode-card">
 
-                    return `
+                        <div class="episode-number">
+                            ${number}
+                        </div>
 
-                        <article class="episode-card">
+                        <div class="episode-info">
 
-                            <div class="episode-number">
-                                ${number}
-                            </div>
+                            <h3>
+                                ${episodeTitle}
+                            </h3>
 
-                            <div class="episode-info">
+                            <div class="episode-meta">
 
-                                <h3>
-                                    ${episodeTitle}
-                                </h3>
-
-                                <p>
+                                <span>
                                     📅 ${airDate}
-                                </p>
+                                </span>
+
+                                <span>
+                                    ⏱️ ${length}
+                                </span>
 
                             </div>
 
-                        </article>
-                    `;
-                }
-            ).join("");
+                        </div>
 
+                    </article>
+                `;
+            }
+        ).join("");
 
-        modalBody.innerHTML = `
+        /*
+         * Primeira página.
+         */
+        if (!append) {
 
-            <div class="episodes-container">
+            modalBody.innerHTML = `
+                <div class="episodes-container">
 
-                <button
-                    id="back-details"
-                    class="back-details-button"
-                    type="button"
-                >
-                    ← Voltar aos detalhes
-                </button>
+                    <button
+                        id="back-details"
+                        class="back-details-button"
+                        type="button"
+                    >
+                        ← Voltar aos detalhes
+                    </button>
 
-                <h2>
-                    📺 Episódios de ${animeTitle}
-                </h2>
+                    <div class="episodes-header">
 
-                <div class="episodes-list">
-                    ${episodesHTML}
+                        <span class="modal-label">
+                            LISTA DE EPISÓDIOS
+                        </span>
+
+                        <h2>
+                            📺 Episódios de ${animeTitle}
+                        </h2>
+
+                        <p>
+                            Confira os episódios disponíveis.
+                        </p>
+
+                    </div>
+
+                    <div
+                        id="episodes-list"
+                        class="episodes-list"
+                    >
+                        ${episodesHTML}
+                    </div>
+
+                    ${
+                        nextUrl
+                            ? `
+                                <button
+                                    id="load-more-episodes"
+                                    class="load-more-episodes"
+                                    type="button"
+                                >
+                                    ⬇️ Carregar mais episódios
+                                </button>
+                              `
+                            : ""
+                    }
+
                 </div>
+            `;
 
-            </div>
-        `;
+        } else {
 
+            /*
+             * Próximos episódios:
+             * apenas adiciona os novos cards.
+             */
+            const episodesList =
+                document.getElementById(
+                    "episodes-list"
+                );
 
-        document
-            .getElementById("back-details")
-            .addEventListener(
+            if (episodesList) {
+                episodesList.insertAdjacentHTML(
+                    "beforeend",
+                    episodesHTML
+                );
+            }
+
+            /*
+             * Remove o botão antigo.
+             */
+            const oldButton =
+                document.getElementById(
+                    "load-more-episodes"
+                );
+
+            if (oldButton) {
+                oldButton.remove();
+            }
+
+            /*
+             * Adiciona novamente se ainda houver
+             * mais episódios.
+             */
+            if (nextUrl) {
+
+                const episodesList =
+                    document.getElementById(
+                        "episodes-list"
+                    );
+
+                if (episodesList) {
+
+                    episodesList.insertAdjacentHTML(
+                        "afterend",
+                        `
+                            <button
+                                id="load-more-episodes"
+                                class="load-more-episodes"
+                                type="button"
+                            >
+                                ⬇️ Carregar mais episódios
+                            </button>
+                        `
+                    );
+                }
+            }
+        }
+
+        /*
+         * Botão voltar.
+         */
+        const backButton =
+            document.getElementById(
+                "back-details"
+            );
+
+        if (backButton) {
+
+            backButton.addEventListener(
                 "click",
                 function () {
 
                     openAnimeModal(
                         currentAnime
                     );
+
                 }
             );
+        }
 
+        /*
+         * Botão carregar mais.
+         */
+        const loadMoreButton =
+            document.getElementById(
+                "load-more-episodes"
+            );
+
+        if (loadMoreButton) {
+
+            loadMoreButton.addEventListener(
+                "click",
+                async function () {
+
+                    /*
+                     * Evita cliques duplicados.
+                     */
+                    loadMoreButton.disabled = true;
+
+                    loadMoreButton.textContent =
+                        "⏳ Carregando...";
+
+                    try {
+
+                        await loadEpisodesView(
+                            animeId,
+                            animeTitle,
+                            offset + 20,
+                            true
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Erro ao carregar mais episódios:",
+                            error
+                        );
+
+                        loadMoreButton.disabled =
+                            false;
+
+                        loadMoreButton.textContent =
+                            "⬇️ Tentar novamente";
+                    }
+                }
+            );
+        }
 
     } catch (error) {
 
@@ -768,7 +936,6 @@ async function loadEpisodesView(
         );
 
         modalBody.innerHTML = `
-
             <div class="message">
 
                 <span>😕</span>
@@ -780,6 +947,14 @@ async function loadEpisodesView(
                 <p>
                     Tente novamente mais tarde.
                 </p>
+
+                <button
+                    type="button"
+                    class="back-details-button"
+                    onclick="openAnimeModal(currentAnime)"
+                >
+                    ← Voltar aos detalhes
+                </button>
 
             </div>
         `;

@@ -90,10 +90,9 @@ async function getRandomAnime() {
 // BUSCAR EPISÓDIOS
 // ============================================
 
-async function getEpisodes(animeId) {
-
+async function getEpisodes(animeId, offset = 0, limit = 20) {
     const url =
-        `${API_URL}/${animeId}/episodes?page[limit]=20`;
+        `${API_URL}/${animeId}/episodes?page[limit]=${limit}&page[offset]=${offset}`;
 
     const response = await fetch(url);
 
@@ -103,5 +102,8 @@ async function getEpisodes(animeId) {
 
     const data = await response.json();
 
-    return data.data;
+    return {
+        episodes: data.data,
+        next: data.links?.next || null
+    };
 }
