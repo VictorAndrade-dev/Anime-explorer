@@ -1,4 +1,3 @@
-
 // ============================================
 // ELEMENTOS PRINCIPAIS
 // ============================================
@@ -29,6 +28,9 @@ const modalOverlay =
 let currentPage = 1;
 let currentSearchTerm = "";
 
+let nextPageUrl = null;
+let previousPageUrl = null;
+
 
 // ============================================
 // PESQUISA
@@ -44,15 +46,19 @@ searchForm.addEventListener(
             searchInput.value.trim();
 
         if (searchTerm === "") {
+
             showError(
                 "Digite o nome de um anime para pesquisar."
             );
+
             return;
         }
 
         // Nova pesquisa começa na primeira página.
         currentPage = 1;
-        currentSearchTerm = searchTerm;
+
+        currentSearchTerm =
+            searchTerm;
 
         await performSearch();
     }
@@ -65,7 +71,9 @@ searchForm.addEventListener(
 
 async function performSearch() {
 
+    // Limpa resultados anteriores.
     animeList.innerHTML = "";
+
     resultsCount.textContent = "";
 
     showLoading();
@@ -74,18 +82,37 @@ async function performSearch() {
 
     try {
 
-        const result =
-            await searchAnime(
-                currentSearchTerm,
-                {
-                    page: currentPage
-                }
-            );
+        // ====================================
+        // BUSCAR API
+        // ====================================
+
+        const result = await searchAnime(
+            currentSearchTerm,
+            {
+                page: currentPage
+            }
+        );
 
         const animes =
             result.anime || [];
 
-        if (!animes || animes.length === 0) {
+
+        // ====================================
+        // SALVAR LINKS DA KITSU
+        // ====================================
+
+        nextPageUrl =
+            result.links?.next || null;
+
+        previousPageUrl =
+            result.links?.prev || null;
+
+
+        // ====================================
+        // NENHUM RESULTADO
+        // ====================================
+
+        if (animes.length === 0) {
 
             showError(
                 `Nenhum anime encontrado para "${currentSearchTerm}".`
@@ -94,12 +121,21 @@ async function performSearch() {
             return;
         }
 
+
+        // ====================================
+        // MOSTRAR RESULTADOS
+        // ====================================
+
         hideMessages();
 
         resultsCount.textContent =
             `${animes.length} resultado(s) — Página ${currentPage}`;
 
-        // Cria os cards.
+
+        // ====================================
+        // CRIAR CARDS
+        // ====================================
+
         animes.forEach(
             function (anime) {
 
@@ -110,10 +146,16 @@ async function performSearch() {
             }
         );
 
-        // Atualiza a paginação.
+
+        // ====================================
+        // PAGINAÇÃO
+        // ====================================
+
         renderPagination(result);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Erro na pesquisa:",
@@ -125,7 +167,9 @@ async function performSearch() {
             "Verifique sua conexão e tente novamente."
         );
 
-    } finally {
+    }
+
+    finally {
 
         searchButton.disabled = false;
 
@@ -139,56 +183,100 @@ async function performSearch() {
 
 function renderPagination(result) {
 
-    // Remove paginação antiga.
+    // Remove paginação anterior.
     const oldPagination =
-        document.getElementById("pagination");
+        document.getElementById(
+            "pagination"
+        );
 
     if (oldPagination) {
+
         oldPagination.remove();
+
     }
 
-    // Cria o container.
+
+    // ========================================
+    // CRIAR CONTAINER
+    // ========================================
+
     const pagination =
         document.createElement("div");
 
-    pagination.id = "pagination";
-    pagination.className = "pagination";
+    pagination.id =
+        "pagination";
 
-    // Botão anterior.
+    pagination.className =
+        "pagination";
+
+
+    // ========================================
+    // BOTÃO ANTERIOR
+    // ========================================
+
     const previousButton =
         document.createElement("button");
 
-    previousButton.type = "button";
-    previousButton.className = "pagination-button";
-    previousButton.textContent = "‹ Anterior";
+    previousButton.type =
+        "button";
 
+    previousButton.className =
+        "pagination-button";
+
+    previousButton.textContent =
+        "‹ Anterior";
+
+
+    // Desabilita se não existir página anterior.
     previousButton.disabled =
-        currentPage === 1;
+        !previousPageUrl;
+
 
     previousButton.addEventListener(
         "click",
-        function () {
+        async function () {
 
-            if (currentPage > 1) {
+            if (!previousPageUrl) {
 
-                currentPage--;
-
-                performSearch();
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
+                return;
 
             }
+
+
+            // Usa a URL fornecida pela Kitsu.
+            const url =
+                previousPageUrl;
+
+
+            // Não alteramos currentPage antes
+            // da pesquisa terminar.
+
+            currentPage--;
+
+            // Passa a URL diretamente para a API.
+            nextPageUrl = url;
+
+            await performSearch();
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
         }
     );
 
-    pagination.appendChild(previousButton);
+
+    pagination.appendChild(
+        previousButton
+    );
 
 
-    // Página atual.
+    // ========================================
+    // INDICADOR
+    // ========================================
+
     const pageIndicator =
         document.createElement("span");
 
@@ -198,47 +286,77 @@ function renderPagination(result) {
     pageIndicator.textContent =
         `Página ${currentPage}`;
 
-    pagination.appendChild(pageIndicator);
+    pagination.appendChild(
+        pageIndicator
+    );
 
 
-    // Botão próximo.
+    // ========================================
+    // BOTÃO PRÓXIMO
+    // ========================================
+
     const nextButton =
         document.createElement("button");
 
-    nextButton.type = "button";
-    nextButton.className = "pagination-button";
-    nextButton.textContent = "Próxima ›";
+    nextButton.type =
+        "button";
 
-    /*
-     * Se retornaram menos que SEARCH_LIMIT,
-     * provavelmente chegamos ao final.
-     */
+    nextButton.className =
+        "pagination-button";
+
+    nextButton.textContent =
+        "Próxima ›";
+
+
+    // Desabilita se não existir próxima página.
     nextButton.disabled =
-    (result.anime || []).length < SEARCH_LIMIT;
+        !nextPageUrl;
+
+
     nextButton.addEventListener(
         "click",
-        function () {
+        async function () {
 
-            if (!nextButton.disabled) {
+            if (!nextPageUrl) {
 
-                currentPage++;
-
-                performSearch();
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
+                return;
 
             }
+
+
+            // Guarda a URL atual.
+            const url =
+                nextPageUrl;
+
+
+            currentPage++;
+
+
+            // Passa a URL da Kitsu.
+            nextPageUrl = url;
+
+
+            await performSearch();
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
         }
     );
 
-    pagination.appendChild(nextButton);
+
+    pagination.appendChild(
+        nextButton
+    );
 
 
-    // Coloca depois dos cards.
+    // ========================================
+    // INSERIR PAGINAÇÃO
+    // ========================================
+
     animeList.parentElement.appendChild(
         pagination
     );
@@ -256,7 +374,8 @@ async function loadPopularAnime() {
         const animes =
             await getPopularAnime();
 
-        popularList.innerHTML = "";
+        popularList.innerHTML =
+            "";
 
         animes.forEach(
             function (anime) {
@@ -268,7 +387,9 @@ async function loadPopularAnime() {
             }
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Erro ao carregar populares:",
@@ -277,6 +398,7 @@ async function loadPopularAnime() {
 
         popularList.innerHTML =
             "<p>Não foi possível carregar os animes populares.</p>";
+
     }
 }
 
@@ -298,7 +420,9 @@ async function loadRandomAnime() {
 
         }
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Erro ao buscar anime aleatório:",
@@ -364,4 +488,3 @@ initializeTheme();
 loadPopularAnime();
 
 renderFavorites();
-

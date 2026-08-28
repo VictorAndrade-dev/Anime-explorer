@@ -1,15 +1,12 @@
-
 // ============================================
 // CONFIGURAÇÃO DA API
 // ============================================
 
-// URL principal da Kitsu API.
-const API_URL = "https://kitsu.io/api/edge/anime";
+const API_URL =
+    "https://kitsu.io/api/edge/anime";
 
-// Quantidade de resultados por página.
 const SEARCH_LIMIT = 15;
 
-// Quantidade de animes populares.
 const POPULAR_LIMIT = 6;
 
 
@@ -17,74 +14,268 @@ const POPULAR_LIMIT = 6;
 // PESQUISAR ANIMES
 // ============================================
 
-async function searchAnime(searchTerm, options = {}) {
+async function searchAnime(
+    searchTerm,
+    options = {}
+) {
 
     const {
         page = 1,
         subtype = "",
         status = "",
         year = "",
-        sort = "-userCount"
+        sort = ""
     } = options;
 
-    // Calcula o deslocamento da página.
-    const offset = (page - 1) * SEARCH_LIMIT;
 
-    // Cria os parâmetros da URL.
-    const params = new URLSearchParams();
+    // ========================================
+    // CONFIGURAÇÃO
+    // ========================================
 
-    // Texto da pesquisa.
-    if (searchTerm.trim()) {
-        params.append("filter[text]", searchTerm.trim());
+    const limitAPI = 20;
+
+    // Quantos resultados queremos carregar
+    // para permitir a paginação.
+    const totalResultados = 100;
+
+
+    // ========================================
+    // FUNÇÃO PARA BUSCAR UMA PARTE
+    // ========================================
+
+    async function buscarParte(offset) {
+
+        const params =
+            new URLSearchParams();
+
+
+        // Texto da pesquisa
+        if (
+            searchTerm &&
+            searchTerm.trim()
+        ) {
+
+            params.append(
+                "filter[text]",
+                searchTerm.trim()
+            );
+
+        }
+
+
+        // Tipo
+        if (subtype) {
+
+            params.append(
+                "filter[subtype]",
+                subtype
+            );
+
+        }
+
+
+        // Status
+        if (status) {
+
+            params.append(
+                "filter[status]",
+                status
+            );
+
+        }
+
+
+        // Ano
+        if (year) {
+
+            params.append(
+                "filter[seasonYear]",
+                year
+            );
+
+        }
+
+
+        // Ordenação
+        if (sort) {
+
+            params.append(
+                "sort",
+                sort
+            );
+
+        }
+
+
+        // Paginação da API
+        params.append(
+            "page[limit]",
+            limitAPI
+        );
+
+        params.append(
+            "page[offset]",
+            offset
+        );
+
+
+        const url =
+            `${API_URL}?${params.toString()}`;
+
+
+        const response =
+            await fetch(url, {
+                headers: {
+                    Accept:
+                        "application/vnd.api+json"
+                }
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Erro HTTP: ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        return data.data || [];
+
     }
 
-    // Filtro por tipo:
-    // TV, movie, OVA, ONA, special, music
-    if (subtype) {
-        params.append("filter[subtype]", subtype);
+
+    // ========================================
+    // BUSCAR RESULTADOS
+    // ========================================
+
+    let todosAnimes = [];
+
+
+    // Faz várias requisições.
+    for (
+        let offset = 0;
+        offset < totalResultados;
+        offset += limitAPI
+    ) {
+
+        const parte =
+            await buscarParte(offset);
+
+
+        // Adiciona os resultados.
+        todosAnimes =
+            todosAnimes.concat(parte);
+
+
+        // Se retornou menos que 20,
+        // não existem mais resultados.
+        if (
+            parte.length < limitAPI
+        ) {
+
+            break;
+
+        }
+
     }
 
-    // Filtro por status:
-    // current, finished, upcoming
-    if (status) {
-        params.append("filter[status]", status);
-    }
 
-    // Filtro por ano de lançamento.
-    if (year) {
-        params.append("filter[seasonYear]", year);
-    }
+    // ========================================
+    // REMOVER DUPLICADOS
+    // ========================================
 
-    // Ordenação.
-    if (sort) {
-        params.append("sort", sort);
-    }
+    const animesUnicos = [];
 
-    // Paginação.
-    params.append("page[limit]", SEARCH_LIMIT);
-    params.append("page[offset]", offset);
+    const ids = new Set();
 
-    const url = `${API_URL}?${params.toString()}`;
 
-    // Faz a requisição.
-    const response = await fetch(url);
+    todosAnimes.forEach(
+        function (anime) {
 
-    // Verifica erro HTTP.
-    if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-    }
+            if (!ids.has(anime.id)) {
 
-    // Converte a resposta.
-    const data = await response.json();
+                ids.add(anime.id);
 
-    // Retorna resultados + informações de paginação.
+                animesUnicos.push(anime);
+
+            }
+
+        }
+    );
+
+
+    // ========================================
+    // PAGINAÇÃO LOCAL
+    // ========================================
+
+    const inicio =
+        (page - 1) * SEARCH_LIMIT;
+
+    const fim =
+        inicio + SEARCH_LIMIT;
+
+
+    const resultadosPagina =
+        animesUnicos.slice(
+            inicio,
+            fim
+        );
+
+
+    // ========================================
+    // VERIFICAR SE EXISTE PRÓXIMA
+    // ========================================
+
+    const temProximaPagina =
+        fim < animesUnicos.length;
+
+    const temPaginaAnterior =
+        page > 1;
+
+
+    // ========================================
+    // RETORNO
+    // ========================================
+
     return {
-        anime: data.data || [],
-        links: data.links || {},
-        meta: data.meta || {},
+
+        anime:
+            resultadosPagina,
+
+        links: {
+
+            next:
+                temProximaPagina
+                    ? `page:${page + 1}`
+                    : null,
+
+            prev:
+                temPaginaAnterior
+                    ? `page:${page - 1}`
+                    : null
+
+        },
+
+        meta: {
+
+            total:
+                animesUnicos.length
+
+        },
+
         page,
-        limit: SEARCH_LIMIT
+
+        limit:
+            SEARCH_LIMIT
+
     };
+
 }
 
 
@@ -94,22 +285,61 @@ async function searchAnime(searchTerm, options = {}) {
 
 async function getPopularAnime() {
 
-    const params = new URLSearchParams();
+    const params =
+        new URLSearchParams();
 
-    params.append("sort", "-userCount");
-    params.append("page[limit]", POPULAR_LIMIT);
 
-    const url = `${API_URL}?${params.toString()}`;
+    params.append(
+        "sort",
+        "-userCount"
+    );
 
-    const response = await fetch(url);
+
+    params.append(
+        "page[limit]",
+        POPULAR_LIMIT
+    );
+
+
+    params.append(
+        "_",
+        Date.now()
+    );
+
+
+    const url =
+        `${API_URL}?${params.toString()}`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                cache: "no-store",
+
+                headers: {
+                    Accept:
+                        "application/vnd.api+json"
+                }
+            }
+        );
+
 
     if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+
+        throw new Error(
+            `Erro HTTP: ${response.status}`
+        );
+
     }
 
-    const data = await response.json();
+
+    const data =
+        await response.json();
+
 
     return data.data || [];
+
 }
 
 
@@ -119,26 +349,73 @@ async function getPopularAnime() {
 
 async function getRandomAnime() {
 
-    // Escolhe uma posição aleatória.
-    const randomOffset = Math.floor(Math.random() * 50);
+    const randomOffset =
+        Math.floor(
+            Math.random() * 50
+        );
 
-    const params = new URLSearchParams();
 
-    params.append("sort", "-userCount");
-    params.append("page[limit]", 1);
-    params.append("page[offset]", randomOffset);
+    const params =
+        new URLSearchParams();
 
-    const url = `${API_URL}?${params.toString()}`;
 
-    const response = await fetch(url);
+    params.append(
+        "sort",
+        "-userCount"
+    );
+
+
+    params.append(
+        "page[limit]",
+        1
+    );
+
+
+    params.append(
+        "page[offset]",
+        randomOffset
+    );
+
+
+    params.append(
+        "_",
+        Date.now()
+    );
+
+
+    const url =
+        `${API_URL}?${params.toString()}`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                cache: "no-store",
+
+                headers: {
+                    Accept:
+                        "application/vnd.api+json"
+                }
+            }
+        );
+
 
     if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+
+        throw new Error(
+            `Erro HTTP: ${response.status}`
+        );
+
     }
 
-    const data = await response.json();
+
+    const data =
+        await response.json();
+
 
     return data.data?.[0] || null;
+
 }
 
 
@@ -146,26 +423,70 @@ async function getRandomAnime() {
 // BUSCAR EPISÓDIOS
 // ============================================
 
-async function getEpisodes(animeId, offset = 0, limit = 20) {
+async function getEpisodes(
+    animeId,
+    offset = 0,
+    limit = 20
+) {
 
-    const params = new URLSearchParams();
+    const params =
+        new URLSearchParams();
 
-    params.append("page[limit]", limit);
-    params.append("page[offset]", offset);
 
-    const url = `${API_URL}/${animeId}/episodes?${params.toString()}`;
+    params.append(
+        "page[limit]",
+        limit
+    );
 
-    const response = await fetch(url);
+
+    params.append(
+        "page[offset]",
+        offset
+    );
+
+
+    const url =
+        `${API_URL}/${animeId}/episodes?${params.toString()}`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                cache: "no-store",
+
+                headers: {
+                    Accept:
+                        "application/vnd.api+json"
+                }
+            }
+        );
+
 
     if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
+
+        throw new Error(
+            `Erro HTTP: ${response.status}`
+        );
+
     }
 
-    const data = await response.json();
+
+    const data =
+        await response.json();
+
 
     return {
-        episodes: data.data || [],
-        next: data.links?.next || null
-    };
-}
 
+        episodes:
+            data.data || [],
+
+        next:
+            data.links?.next || null,
+
+        prev:
+            data.links?.prev || null
+
+    };
+
+}
