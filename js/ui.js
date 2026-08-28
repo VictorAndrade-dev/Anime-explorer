@@ -176,6 +176,9 @@ function createAnimeCard(anime) {
         attributes.status
     );
 
+    const genres =
+    attributes.genres || [];
+
 
     // HTML do card.
     card.innerHTML = `

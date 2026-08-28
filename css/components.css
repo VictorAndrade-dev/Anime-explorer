@@ -490,3 +490,275 @@
     font-size: 0.82rem;
     font-weight: 700;
 }
+
+/* ============================================
+   FILTROS DE PESQUISA
+   ============================================ */
+
+.search-filters {
+    margin-top: 22px;
+    margin-bottom: 30px;
+
+    padding: 22px;
+
+    background: var(--color-surface);
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--border-radius-medium);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ============================================
+   CABEÇALHO
+   ============================================ */
+
+.filters-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+
+.filters-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--color-primary-light);
+
+    font-size: 0.7rem;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.filters-header h3 {
+    margin: 0;
+
+    color: var(--color-text);
+
+    font-size: 1.15rem;
+}
+
+
+/* ============================================
+   GRID
+   ============================================ */
+
+.filters-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+/* ============================================
+   GRUPO
+   ============================================ */
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.filter-group label {
+    color: var(--color-text-secondary);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+
+/* ============================================
+   SELECT
+   ============================================ */
+
+.filter-group select {
+    width: 100%;
+
+    height: 44px;
+
+    padding: 0 12px;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--border-radius-small);
+
+    background: var(--color-surface-hover);
+
+    color: var(--color-text);
+
+    font-family: inherit;
+
+    font-size: 0.82rem;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.filter-group select:hover {
+    border-color: var(--color-primary);
+}
+
+
+.filter-group select:focus {
+    border-color: var(--color-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+
+/* ============================================
+   BOTÃO LIMPAR
+   ============================================ */
+
+.clear-filters-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    height: 36px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--color-text-muted);
+
+    font-family: inherit;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.clear-filters-button:hover {
+    background: var(--color-surface-hover);
+
+    border-color: var(--color-primary);
+
+    color: var(--color-primary-light);
+
+    transform: translateY(-1px);
+}
+
+
+.clear-filters-button:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   FILTROS - AÇÕES
+   ============================================ */
+
+.filters-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.apply-filters-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 42px;
+    padding: 0 18px;
+
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius-small);
+
+    background: var(--color-primary);
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.apply-filters-button:hover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary-light);
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 20px rgba(0, 0, 0, 0.22);
+}
+
+.apply-filters-button:active {
+    transform: translateY(0);
+}
+
+
+/* ============================================
+   GÊNEROS DOS CARDS
+   ============================================ */
+
+.anime-tags {
+    min-height: 28px;
+}
+
+.anime-tag.genre-tag {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: transparent;
+}
+
+
+/* ============================================
+   FILTROS - MELHOR ESPAÇAMENTO
+   ============================================ */
+
+.search-filters {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filter-group select {
+    box-sizing: border-box;
+}

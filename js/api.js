@@ -19,12 +19,13 @@ async function searchAnime(
     options = {}
 ) {
 
-    const {
+        const {
         page = 1,
         subtype = "",
         status = "",
         year = "",
-        sort = ""
+        sort = "",
+        genre = ""
     } = options;
 
 
@@ -84,6 +85,15 @@ async function searchAnime(
 
         }
 
+        // Gênero
+        if (genre) {
+
+            params.append(
+                "filter[genres]",
+                genre
+            );
+
+        }
 
         // Ano
         if (year) {

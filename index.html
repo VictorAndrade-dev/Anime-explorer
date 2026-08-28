@@ -54,6 +54,105 @@
 
             <button type="submit" id="search-button">🔎 Pesquisar</button>
           </form>
+
+          <!-- FILTROS DE PESQUISA -->
+          <div class="search-filters">
+            <div class="filters-header">
+              <div>
+                <span class="filters-label">FILTROS</span>
+                <h3>Refine sua pesquisa</h3>
+              </div>
+
+              <button
+                id="clear-filters"
+                class="clear-filters-button"
+                type="button"
+              >
+                ↻ Limpar
+              </button>
+            </div>
+
+            <div class="filters-grid">
+              <div class="filter-group">
+                <label for="filter-genre">🎭 Gênero</label>
+
+                <select id="filter-genre">
+                  <option value="">Todos os gêneros</option>
+                  <option value="action">Ação</option>
+                  <option value="adventure">Aventura</option>
+                  <option value="comedy">Comédia</option>
+                  <option value="drama">Drama</option>
+                  <option value="fantasy">Fantasia</option>
+                  <option value="horror">Horror</option>
+                  <option value="romance">Romance</option>
+                  <option value="science-fiction">Ficção Científica</option>
+                  <option value="mystery">Mistério</option>
+                  <option value="sports">Esportes</option>
+                  <option value="historical">Histórico</option>
+                  <option value="music">Música</option>
+                  <option value="slice-of-life">Slice of Life</option>
+                  <option value="supernatural">Sobrenatural</option>
+                  <option value="psychological">Psicológico</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-type">🎬 Tipo</label>
+
+                <select id="filter-type">
+                  <option value="">Todos os tipos</option>
+                  <option value="tv">Série</option>
+                  <option value="movie">Filme</option>
+                  <option value="ova">OVA</option>
+                  <option value="ona">ONA</option>
+                  <option value="special">Especial</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-status">📌 Status</label>
+
+                <select id="filter-status">
+                  <option value="">Todos os status</option>
+                  <option value="current">Em lançamento</option>
+                  <option value="finished">Finalizado</option>
+                  <option value="upcoming">Em breve</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-year">📅 Ano</label>
+
+                <select id="filter-year">
+                  <option value="">Todos os anos</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-sort">⭐ Ordenar por</label>
+
+                <select id="filter-sort">
+                  <option value="">Relevância</option>
+                  <option value="-averageRating">Melhor avaliação</option>
+                  <option value="averageRating">Menor avaliação</option>
+                  <option value="-startDate">Mais recentes</option>
+                  <option value="startDate">Mais antigos</option>
+                  <option value="canonicalTitle">Nome A-Z</option>
+                  <option value="-canonicalTitle">Nome Z-A</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filters-actions">
+              <button
+                id="apply-filters"
+                class="apply-filters-button"
+                type="button"
+              >
+                🔎 Aplicar filtros
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -164,6 +263,5 @@
     <script src="js/favorites.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/script.js"></script>
-    
   </body>
 </html>

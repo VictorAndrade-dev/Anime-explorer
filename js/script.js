@@ -20,6 +20,83 @@ const closeModalButton =
 const modalOverlay =
     document.querySelector(".modal-overlay");
 
+// Campos de Filtragem, Gênero, Status e etc...
+const applyFiltersButton =
+    document.getElementById("apply-filters");
+
+const filterGenre =
+    document.getElementById("filter-genre");
+
+const filterType =
+    document.getElementById("filter-type");
+
+const filterStatus =
+    document.getElementById("filter-status");
+
+const filterYear =
+    document.getElementById("filter-year");
+
+const filterSort =
+    document.getElementById("filter-sort");
+
+const clearFiltersButton =
+    document.getElementById("clear-filters");
+
+// ============================================
+// PREENCHER ANOS
+// ============================================
+
+function initializeYearFilter() {
+
+    if (!filterYear) {
+        return;
+    }
+
+    const currentYear =
+        new Date().getFullYear();
+
+    for (
+        let year = currentYear;
+        year >= 1960;
+        year--
+    ) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = year;
+
+        option.textContent = year;
+
+        filterYear.appendChild(option);
+    }
+}
+
+// ============================================
+// OBTER FILTROS ATUAIS
+// ============================================
+
+function getCurrentFilters() {
+
+    return {
+
+        genre:
+            filterGenre?.value || "",
+
+        subtype:
+            filterType?.value || "",
+
+        status:
+            filterStatus?.value || "",
+
+        year:
+            filterYear?.value || "",
+
+        sort:
+            filterSort?.value || ""
+
+    };
+}
 
 // ============================================
 // PAGINAÇÃO DA PESQUISA
@@ -87,11 +164,12 @@ async function performSearch() {
         // ====================================
 
         const result = await searchAnime(
-            currentSearchTerm,
-            {
-                page: currentPage
-            }
-        );
+        currentSearchTerm,
+        {
+            page: currentPage,
+            ...getCurrentFilters()
+        }
+    );
 
         const animes =
             result.anime || [];
@@ -478,12 +556,101 @@ document.addEventListener(
     }
 );
 
+// ============================================
+// APLICAR FILTROS
+// ============================================
+
+function applyFilters() {
+    currentPage = 1;
+
+    if (!currentSearchTerm) {
+        showError(
+            "Digite o nome de um anime para pesquisar."
+        );
+        searchInput.focus();
+        return;
+    }
+
+    performSearch();
+}
+
+
+// ============================================
+// BOTÃO APLICAR
+// ============================================
+
+if (applyFiltersButton) {
+    applyFiltersButton.addEventListener(
+        "click",
+        applyFilters
+    );
+}
+
+
+// ============================================
+// FILTROS
+// ============================================
+
+const filterElements = [
+    filterGenre,
+    filterType,
+    filterStatus,
+    filterYear,
+    filterSort
+];
+
+filterElements.forEach(function (filter) {
+
+    if (!filter) {
+        return;
+    }
+
+    filter.addEventListener(
+        "change",
+        function () {
+
+            // Não pesquisa imediatamente.
+            // O usuário escolhe todos os filtros
+            // e depois clica em Aplicar.
+        }
+    );
+});
+
+
+// ============================================
+// LIMPAR FILTROS
+// ============================================
+
+if (clearFiltersButton) {
+
+    clearFiltersButton.addEventListener(
+        "click",
+        function () {
+
+            filterGenre.value = "";
+            filterType.value = "";
+            filterStatus.value = "";
+            filterYear.value = "";
+            filterSort.value = "";
+
+            currentPage = 1;
+
+            if (currentSearchTerm) {
+                performSearch();
+            }
+        }
+    );
+}
+
+
 
 // ============================================
 // INICIALIZAÇÃO
 // ============================================
 
 initializeTheme();
+
+initializeYearFilter();
 
 loadPopularAnime();
 

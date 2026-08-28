@@ -457,3 +457,85 @@
     }
 }
 
+/* ============================================
+   FILTROS - RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 900px) {
+
+    .filters-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .filters-actions {
+        justify-content: stretch;
+    }
+
+    .apply-filters-button {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .search-filters {
+        margin-top: 18px;
+        padding: 16px;
+    }
+
+    .filters-header {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .filters-header h3 {
+        font-size: 1rem;
+    }
+
+    .clear-filters-button {
+        flex-shrink: 0;
+        height: 34px;
+        padding: 0 10px;
+        font-size: 0.72rem;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .filter-group select {
+        height: 46px;
+        font-size: 0.85rem;
+    }
+
+    .filters-actions {
+        margin-top: 14px;
+    }
+
+    .apply-filters-button {
+        min-height: 46px;
+    }
+}
+
+
+@media (max-width: 400px) {
+
+    .search-filters {
+        padding: 13px;
+    }
+
+    .filters-header {
+        flex-direction: column;
+    }
+
+    .clear-filters-button {
+        width: 100%;
+    }
+
+    .apply-filters-button {
+        font-size: 0.8rem;
+    }
+}
