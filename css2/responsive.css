@@ -68,7 +68,6 @@
     .anime-grid {
         grid-template-columns:
             repeat(auto-fill, minmax(170px, 1fr));
-
         gap: 18px;
     }
 
@@ -104,27 +103,20 @@
 
     .header {
         position: fixed;
-
         top: auto;
         bottom: 0;
         left: 0;
-
         width: 100%;
-
         z-index: 1000;
     }
 
     .header-content {
         height: 65px;
         min-height: 65px;
-
-        padding: 8px 0;
-
+        padding: 8px 10px;
         flex-direction: row;
         justify-content: center;
     }
-
-    /* Esconde o logo no mobile */
 
     .logo {
         display: none;
@@ -132,11 +124,9 @@
 
     .nav {
         width: 100%;
-
         display: flex;
         align-items: center;
         justify-content: space-around;
-
         gap: 5px;
         flex-wrap: nowrap;
     }
@@ -145,18 +135,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         height: 45px;
-
         font-size: 0.8rem;
+        white-space: nowrap;
     }
 
     .theme-button {
         height: 45px;
-
         padding: 7px 10px;
-
         font-size: 0.8rem;
+        white-space: nowrap;
     }
 
 
@@ -166,11 +154,13 @@
 
     .hero {
         min-height: auto;
-        padding: 70px 0 50px;
+        padding: 65px 0 50px;
     }
 
     .hero-content {
         width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
     }
 
     .hero-tag {
@@ -179,38 +169,62 @@
     }
 
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
         line-height: 1.1;
         margin-bottom: 20px;
     }
 
     .hero p {
+        max-width: 500px;
         font-size: 0.95rem;
-        margin-bottom: 25px;
+        margin: 0 auto 25px;
     }
 
 
-    /* ========================================
-       PESQUISA
-       ======================================== */
+   /* ========================================
+   PESQUISA
+   ======================================== */
 
     .search-box {
-        flex-direction: column;
-        gap: 8px;
+        width: 100%;
+        max-width: 100%;
 
-        padding: 8px;
+        display: flex;
+        flex-direction: row;
+
+        gap: 6px;
+        padding: 6px;
+
+        border-radius: var(--border-radius-medium);
     }
 
     .search-box input {
-        width: 100%;
-        padding: 12px;
+        flex: 1;
+        width: auto;
+        min-width: 0;
+
+        padding: 12px 12px;
+
+        font-size: 0.9rem;
     }
 
     .search-box button {
-        width: 100%;
-        min-height: 45px;
-    }
+        width: auto;
+        min-height: 42px;
 
+        padding: 0 14px;
+
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    
+    /* ========================================
+       BTN ALEATÓRIO
+       ======================================== */
+        .random-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
 
     /* ========================================
        SEÇÕES
@@ -247,7 +261,7 @@
        ======================================== */
 
     .anime-image {
-        aspect-ratio: 3 / 4;
+        aspect-ratio: 4 / 5;
     }
 
 
@@ -294,9 +308,7 @@
     .modal-content {
         width: calc(100% - 24px);
         max-height: 85vh;
-
         padding: 20px;
-
         overflow-y: auto;
     }
 
@@ -331,9 +343,40 @@
         font-size: 0.7rem;
     }
 
+
+    /* HERO */
+
+    .hero-content {
+        padding: 0 14px;
+    }
+
     .hero h1 {
         font-size: 2.2rem;
     }
+
+
+    /* PESQUISA */
+
+    .search-box {
+        padding: 7px;
+    }
+
+    .search-box input {
+        padding: 11px 9px;
+    }
+
+    
+    /* ========================================
+       BTN ALEATÓRIO
+       ======================================== */
+     
+        .random-button {
+            padding: 7px 10px;
+            font-size: 0.75rem;
+        }
+
+
+    /* GRID */
 
     .anime-grid {
         gap: 8px;
