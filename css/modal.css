@@ -1,46 +1,61 @@
 /* ============================================
+   MODAL - DETALHES DO ANIME
+   ============================================ */
+
+/* ============================================
    MODAL
    ============================================ */
 
 .modal {
     position: fixed;
     inset: 0;
-
     z-index: 1000;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     padding: 20px;
 }
 
+/* ============================================
+   FUNDO
+   ============================================ */
+
 .modal-overlay {
     position: absolute;
     inset: 0;
 
-    background: rgba(0, 0, 0, 0.75);
-
-    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(6px);
 }
+
+/* ============================================
+   CONTEÚDO
+   ============================================ */
 
 .modal-content {
     position: relative;
-    z-index: 2;
+    z-index: 1;
 
-    width: min(850px, 100%);
+    width: min(900px, calc(100% - 20px));
     max-height: 90vh;
 
     overflow-y: auto;
 
-    background: #17172a;
+    padding: 35px;
 
-    border: 1px solid #383852;
-    border-radius: 15px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
 
-    padding: 30px;
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55);
 }
+
+/* ============================================
+   BOTÃO FECHAR
+   ============================================ */
 
 .close-modal {
     position: absolute;
@@ -48,58 +63,510 @@
     top: 15px;
     right: 15px;
 
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
 
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--color-border);
     border-radius: 50%;
 
-    background: #25253b;
-    color: #ddd;
+    background: var(--color-surface-hover);
+    color: var(--color-text);
 
-    transition: 0.3s;
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    transition: var(--transition-normal);
 }
 
 .close-modal:hover {
-    background: #7c3aed;
-    color: white;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+
+    transform: rotate(90deg);
 }
 
 /* ============================================
-   CONTEÚDO DO MODAL
+   INFORMAÇÕES DO ANIME
    ============================================ */
 
 .modal-anime {
     display: grid;
 
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 250px 1fr;
 
-    gap: 30px;
+    gap: 35px;
+
+    align-items: start;
+}
+
+/* ============================================
+   POSTER
+   ============================================ */
+
+.modal-poster {
+    width: 100%;
 }
 
 .modal-image {
+    display: block;
+
     width: 100%;
+    aspect-ratio: 2 / 3;
 
-    border-radius: 10px;
+    object-fit: cover;
+
+    border-radius: var(--border-radius-medium);
 }
 
-.modal-info h2 {
+/* ============================================
+   INFORMAÇÕES
+   ============================================ */
+
+.modal-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--color-primary-light);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.modal-title {
+    margin-bottom: 12px;
+
     font-size: 2rem;
-
-    margin-bottom: 15px;
+    line-height: 1.2;
 }
 
-.modal-synopsis {
-    color: #aaaabd;
+/* ============================================
+   NOTA
+   ============================================ */
+
+.modal-rating {
+    width: fit-content;
 
     margin-bottom: 20px;
+    padding: 6px 10px;
+
+    border-radius: var(--radius-sm);
+
+    background: rgba(250, 204, 21, 0.12);
+
+    color: #facc15;
+
+    font-size: 0.9rem;
+    font-weight: 700;
 }
 
+/* ============================================
+   SINOPSE
+   ============================================ */
+
+.modal-synopsis {
+    margin-bottom: 25px;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* ============================================
+   DETALHES
+   ============================================ */
+
 .modal-details {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+
+    padding: 0;
+
+    border: none;
+}
+
+.modal-detail {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    background: var(--color-surface-hover);
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--border-radius-small);
+}
+
+.modal-detail > span {
+    font-size: 1.1rem;
+}
+
+.modal-detail div {
     display: flex;
     flex-direction: column;
 
-    gap: 8px;
+    gap: 2px;
+}
 
-    color: #ccc;
+.modal-detail small {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+}
+
+.modal-detail strong {
+    color: var(--color-text);
+
+    font-size: 0.85rem;
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
+
+.modal-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: auto;
+}
+
+.episodes-button,
+.modal-favorite-button {
+    flex: 1;
+
+    padding: 11px 15px;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+
+    background: transparent;
+    color: var(--color-text);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: var(--transition-normal);
+}
+
+/* ============================================
+   EPISÓDIOS
+   ============================================ */
+
+.episodes-button:hover {
+    background: var(--color-primary);
+
+    border-color: var(--color-primary);
+
+    color: #fff;
+}
+
+/* ============================================
+   FAVORITO
+   ============================================ */
+
+.modal-favorite-button:hover {
+    border-color: #ef4444;
+
+    color: #ef4444;
+}
+
+.modal-favorite-button.favorited {
+    background: #ef4444;
+
+    border-color: #ef4444;
+
+    color: #fff;
+}
+
+/* ============================================
+   BOTÕES DO MODAL
+   ============================================ */
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.episodes-button {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0 18px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.episodes-button:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Botão de favorito */
+
+.modal-favorite-button {
+    position: static;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 145px;
+    min-height: 44px;
+    padding: 0 18px;
+
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.modal-favorite-button:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.modal-favorite-button:active,
+.episodes-button:active {
+    transform: translateY(0);
+}
+
+/* Anime favoritado */
+
+.modal-favorite-button.favorited {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.modal-favorite-button.favorited:hover {
+    filter: brightness(1.1);
+}
+
+/* ============================================
+   RESPONSIVIDADE - TABLET
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    .modal {
+        padding: 15px;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-height: 92vh;
+        padding: 25px;
+    }
+
+    .modal-anime {
+        grid-template-columns: 190px 1fr;
+        gap: 25px;
+    }
+
+    .modal-title {
+        font-size: 1.6rem;
+    }
+
+    .modal-synopsis {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .modal-details {
+        gap: 8px;
+    }
+
+    .modal-detail {
+        padding: 10px;
+    }
+
+    .modal-actions {
+        margin-top: 20px;
+    }
+
+}
+
+
+/* ============================================
+   RESPONSIVIDADE - CELULAR
+   ============================================ */
+
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 10px;
+        align-items: center;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-height: 94vh;
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .modal-anime {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* Poster */
+
+    .modal-poster {
+        width: 140px;
+        margin: 0 auto;
+    }
+
+    .modal-image {
+        width: 140px;
+        aspect-ratio: 2 / 3;
+    }
+
+    /* Informações */
+
+    .modal-info {
+        width: 100%;
+    }
+
+    .modal-label {
+        font-size: 0.65rem;
+        text-align: center;
+    }
+
+    .modal-title {
+        margin-bottom: 10px;
+        font-size: 1.45rem;
+        text-align: center;
+    }
+
+    .modal-rating {
+        margin: 0 auto 18px;
+    }
+
+    .modal-synopsis {
+        margin-bottom: 20px;
+        font-size: 0.88rem;
+        line-height: 1.6;
+    }
+
+    /* Detalhes */
+
+    .modal-details {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .modal-detail {
+        min-width: 0;
+        padding: 9px;
+    }
+
+    .modal-detail > span {
+        font-size: 1rem;
+    }
+
+    .modal-detail small {
+        font-size: 0.65rem;
+    }
+
+    .modal-detail strong {
+        font-size: 0.78rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Botões */
+
+    .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .episodes-button,
+    .modal-favorite-button {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .modal-favorite-button {
+        min-width: 0;
+    }
+
+    /* Fechar */
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
 }

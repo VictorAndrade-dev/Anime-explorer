@@ -1,99 +1,397 @@
 /* ============================================
-   RESPONSIVIDADE
+   ANIME EXPLORER - RESPONSIVIDADE
    ============================================ */
 
-@media (max-width: 700px) {
+
+/* ============================================
+   TABLET
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    /* HEADER */
 
     .header-content {
-        height: 60px;
+        height: auto;
+        min-height: 70px;
+        padding: 12px 0;
+        gap: 20px;
     }
 
     .nav {
+        display: flex;
+        align-items: center;
         gap: 15px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .nav a {
-        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        height: 38px;
     }
+
+    .theme-button {
+        height: 38px;
+        padding: 7px 10px;
+    }
+
+
+    /* HERO */
 
     .hero {
         min-height: 450px;
         padding: 60px 0;
     }
 
+    .hero-content {
+        max-width: 700px;
+    }
+
     .hero h1 {
-        font-size: 2.7rem;
+        font-size: clamp(2.3rem, 7vw, 4rem);
     }
 
-    .hero p {
-        font-size: 1rem;
+
+    /* SEÇÕES */
+
+    .results-section,
+    .popular-section,
+    .favorites-section {
+        padding: 55px 0;
     }
 
-    /* Pesquisa */
 
-    .search-box {
-        flex-direction: column;
-        gap: 7px;
-    }
-
-    .search-box button {
-        padding: 12px;
-    }
-
-    /* Cabeçalho das seções */
-
-    .section-header {
-        align-items: flex-start;
-
-        gap: 15px;
-
-        flex-direction: column;
-    }
-
-    /* Cards */
+    /* GRID */
 
     .anime-grid {
         grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            repeat(auto-fill, minmax(170px, 1fr));
+        gap: 18px;
+    }
 
+
+    /* MODAL */
+
+    .modal-content {
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+
+/* ============================================
+   CELULAR
+   ============================================ */
+
+@media (max-width: 600px) {
+
+    /* ========================================
+       ESPAÇO PARA A NAVBAR INFERIOR
+       ======================================== */
+
+    body {
+        padding-bottom: 75px;
+    }
+
+
+    /* ========================================
+       NAVBAR INFERIOR
+       ======================================== */
+
+    .header {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .header-content {
+        height: 65px;
+        min-height: 65px;
+        padding: 8px 10px;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .nav {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 5px;
+        flex-wrap: nowrap;
+    }
+
+    .nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 45px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .theme-button {
+        height: 45px;
+        padding: 7px 10px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+
+    /* ========================================
+       HERO
+       ======================================== */
+
+    .hero {
+        min-height: auto;
+        padding: 65px 0 50px;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 16px;
+    }
+
+    .hero-tag {
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+    }
+
+    .hero h1 {
+        font-size: 2.4rem;
+        line-height: 1.1;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        max-width: 500px;
+        font-size: 0.95rem;
+        margin: 0 auto 25px;
+    }
+
+
+   /* ========================================
+   PESQUISA
+   ======================================== */
+
+    .search-box {
+        width: 100%;
+        max-width: 100%;
+
+        display: flex;
+        flex-direction: row;
+
+        gap: 6px;
+        padding: 6px;
+
+        border-radius: var(--border-radius-medium);
+    }
+
+    .search-box input {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+
+        padding: 12px 12px;
+
+        font-size: 0.9rem;
+    }
+
+    .search-box button {
+        width: auto;
+        min-height: 42px;
+
+        padding: 0 14px;
+
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    
+    /* ========================================
+       BTN ALEATÓRIO
+       ======================================== */
+        .random-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    /* ========================================
+       SEÇÕES
+       ======================================== */
+
+    .results-section,
+    .popular-section,
+    .favorites-section {
+        padding: 45px 0;
+    }
+
+    .section-header {
+        align-items: flex-start;
         gap: 15px;
     }
 
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
+
+
+    /* ========================================
+       GRID DE ANIMES
+       ======================================== */
+
+    .anime-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+
+    /* ========================================
+       IMAGENS DOS CARDS
+       ======================================== */
+
+    .anime-image {
+        aspect-ratio: 4 / 5;
+    }
+
+
+    /* ========================================
+       INFORMAÇÕES DOS CARDS
+       ======================================== */
+
     .anime-info {
-        padding: 12px;
+        padding: 10px;
     }
 
     .anime-title {
         font-size: 0.9rem;
+        margin-bottom: 6px;
     }
 
-    /* Modal */
+    .anime-meta {
+        gap: 5px;
+        margin-bottom: 8px;
+        font-size: 0.7rem;
+    }
+
+    .anime-tags {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .anime-tag {
+        padding: 3px 6px;
+        font-size: 0.65rem;
+    }
+
+    .details-button,
+    .favorite-button {
+        padding: 7px;
+        font-size: 0.8rem;
+    }
+
+
+    /* ========================================
+       MODAL
+       ======================================== */
 
     .modal-content {
+        width: calc(100% - 24px);
+        max-height: 85vh;
         padding: 20px;
+        overflow-y: auto;
     }
 
-    .modal-anime {
-        grid-template-columns: 1fr;
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+
+    .footer {
+        padding: 30px 0;
     }
 
-    .modal-image {
-        width: 180px;
-        margin: 0 auto;
+    .footer p,
+    .footer small {
+        font-size: 0.8rem;
     }
 }
 
+
+/* ============================================
+   CELULARES PEQUENOS
+   ============================================ */
+
 @media (max-width: 400px) {
 
-    .logo {
-        font-size: 1rem;
+    .nav a {
+        font-size: 0.7rem;
     }
 
-    .nav a {
-        font-size: 0.75rem;
+    .theme-button {
+        padding: 6px 8px;
+        font-size: 0.7rem;
     }
+
+
+    /* HERO */
+
+    .hero-content {
+        padding: 0 14px;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+
+    /* PESQUISA */
+
+    .search-box {
+        padding: 7px;
+    }
+
+    .search-box input {
+        padding: 11px 9px;
+    }
+
+    
+    /* ========================================
+       BTN ALEATÓRIO
+       ======================================== */
+     
+        .random-button {
+            padding: 7px 10px;
+            font-size: 0.75rem;
+        }
+
+
+    /* GRID */
 
     .anime-grid {
-        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .anime-info {
+        padding: 8px;
+    }
+
+    .anime-title {
+        font-size: 0.85rem;
+    }
+
+    .details-button,
+    .favorite-button {
+        font-size: 0.75rem;
     }
 }

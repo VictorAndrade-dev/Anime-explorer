@@ -38,6 +38,97 @@ const modalBody =
 const themeButton =
     document.getElementById("theme-button");
 
+// ============================================
+// TRADUÇÃO E PADRONIZAÇÃO DOS DADOS
+// ============================================
+
+function translateType(type) {
+    const types = {
+        tv: "Série",
+        movie: "Filme",
+        ova: "OVA",
+        ona: "ONA",
+        special: "Especial",
+        music: "Musical",
+        "tv_special": "Especial de TV"
+    };
+
+    return types[type] || "Não informado";
+}
+
+function translateStatus(status) {
+    const statuses = {
+        finished: "Finalizado",
+        current: "Em lançamento",
+        upcoming: "Em breve",
+        tba: "A definir"
+    };
+
+    return statuses[status] || "Não informado";
+}
+
+function formatScore(score) {
+    if (!score) {
+        return "Não informado";
+    }
+
+    const numericScore = Number(score);
+
+    if (Number.isNaN(numericScore)) {
+        return "Não informado";
+    }
+
+    return (numericScore / 10).toFixed(1);
+}
+
+function formatYear(date) {
+    if (!date) {
+        return "Não informado";
+    }
+
+    const year = new Date(date).getFullYear();
+
+    return Number.isNaN(year)
+        ? "Não informado"
+        : year;
+}
+
+function formatEpisodes(episodes) {
+    if (!episodes) {
+        return "Não informado";
+    }
+
+    return episodes;
+}
+
+// ============================================
+// FORMATAR TÍTULO
+// ============================================
+
+function formatTitle(anime) {
+    const attributes = anime.attributes || {};
+
+    return (
+        attributes.titles?.pt_br ||
+        attributes.titles?.pt ||
+        attributes.titles?.en ||
+        attributes.titles?.en_jp ||
+        attributes.canonicalTitle ||
+        "Título não informado"
+    );
+}
+
+// ============================================
+// FORMATAR DURAÇÃO
+// ============================================
+
+function formatDuration(duration) {
+    if (!duration) {
+        return "Não informado";
+    }
+
+    return `${duration} min`;
+}
 
 // ============================================
 // CRIAR CARD
@@ -54,11 +145,7 @@ function createAnimeCard(anime) {
         anime.attributes || {};
 
     // Título do anime.
-    const title =
-        attributes.titles?.en ||
-        attributes.titles?.en_jp ||
-        attributes.canonicalTitle ||
-        "Título desconhecido";
+   const title = formatTitle(anime);
 
     // Imagem.
     const image =
@@ -66,27 +153,28 @@ function createAnimeCard(anime) {
         attributes.posterImage?.medium ||
         "https://via.placeholder.com/300x450?text=Sem+Imagem";
 
-    // Nota.
-    const score =
-        attributes.averageRating ?? "N/A";
+    // Nota    
+    const score = formatScore(
+        attributes.averageRating
+    );
 
-    // Episódios.
-    const episodes =
-        attributes.episodeCount ?? "N/A";
+    // Episodios
+    const episodes = formatEpisodes(
+        attributes.episodeCount
+    );
 
-    // Ano.
-    const releaseDate =
+    //Ano Lançamento
+    const releaseDate = formatYear(
         attributes.startDate
-            ? new Date(attributes.startDate).getFullYear()
-            : "N/A";
+    );
 
-    // Tipo.
-    const type =
-        attributes.subtype || "N/A";
+    const type = translateType(
+        attributes.subtype
+    );
 
-    // Status.
-    const status =
-        attributes.status || "N/A";
+    const status = translateStatus(
+        attributes.status
+    );
 
 
     // HTML do card.
@@ -299,17 +387,11 @@ let currentAnime = null;
 
 
 function openAnimeModal(anime) {
-
     currentAnime = anime;
 
-    const attributes =
-        anime.attributes || {};
+    const attributes = anime.attributes || {};
 
-    const title =
-        attributes.titles?.en ||
-        attributes.titles?.en_jp ||
-        attributes.canonicalTitle ||
-        "Título desconhecido";
+    const title = formatTitle(anime);
 
     const image =
         attributes.posterImage?.large ||
@@ -320,37 +402,54 @@ function openAnimeModal(anime) {
         attributes.synopsis ||
         "Sinopse não disponível.";
 
-    const score =
-        attributes.averageRating ?? "N/A";
+    const score = formatScore(
+        attributes.averageRating
+    );
 
-    const episodes =
-        attributes.episodeCount ?? "N/A";
+    const episodes = formatEpisodes(
+        attributes.episodeCount
+    );
 
-    const status =
-        attributes.status || "N/A";
+    const duration = formatDuration(
+        attributes.episodeLength
+    );
 
-    const type =
-        attributes.subtype || "N/A";
+    const status = translateStatus(
+        attributes.status
+    );
 
-    const releaseDate =
+    const type = translateType(
+        attributes.subtype
+    );
+
+    const releaseDate = formatYear(
         attributes.startDate
-            ? new Date(attributes.startDate).getFullYear()
-            : "N/A";
-
+    );
 
     modalBody.innerHTML = `
-
         <div class="modal-anime">
 
-            <img
-                src="${image}"
-                alt="Capa do anime ${title}"
-                class="modal-image"
-            >
+            <div class="modal-poster">
+                <img
+                    src="${image}"
+                    alt="Capa do anime ${title}"
+                    class="modal-image"
+                >
+            </div>
 
             <div class="modal-info">
 
-                <h2>${title}</h2>
+                <span class="modal-label">
+                    DETALHES DO ANIME
+                </span>
+
+                <h2 class="modal-title">
+                    ${title}
+                </h2>
+
+                <div class="modal-rating">
+                    ⭐ ${score}
+                </div>
 
                 <p class="modal-synopsis">
                     ${synopsis}
@@ -358,57 +457,83 @@ function openAnimeModal(anime) {
 
                 <div class="modal-details">
 
-                    <p>
-                        ⭐ <strong>Nota:</strong>
-                        ${score}
-                    </p>
+                    <div class="modal-detail">
+                        <span>📺</span>
+                        <div>
+                            <small>Episódios</small>
+                            <strong>${episodes}</strong>
+                        </div>
+                    </div>
 
-                    <p>
-                        📺 <strong>Episódios:</strong>
-                        ${episodes}
-                    </p>
+                    <div class="modal-detail">
+                        <span>⏱️</span>
+                        <div>
+                            <small>Duração</small>
+                            <strong>${duration}</strong>
+                        </div>
+                    </div>
 
-                    <p>
-                        📅 <strong>Ano:</strong>
-                        ${releaseDate}
-                    </p>
+                    <div class="modal-detail">
+                        <span>📅</span>
+                        <div>
+                            <small>Ano</small>
+                            <strong>${releaseDate}</strong>
+                        </div>
+                    </div>
 
-                    <p>
-                        🎬 <strong>Tipo:</strong>
-                        ${type}
-                    </p>
+                    <div class="modal-detail">
+                        <span>🎬</span>
+                        <div>
+                            <small>Tipo</small>
+                            <strong>${type}</strong>
+                        </div>
+                    </div>
 
-                    <p>
-                        📌 <strong>Status:</strong>
-                        ${status}
-                    </p>
+                    <div class="modal-detail">
+                        <span>📌</span>
+                        <div>
+                            <small>Status</small>
+                            <strong>${status}</strong>
+                        </div>
+                    </div>
 
                 </div>
 
-                <button
-                    id="episodes-button"
-                    class="episodes-button"
-                    type="button"
-                >
-                    📺 Ver episódios
-                </button>
+                <div class="modal-actions">
+                   <div class="modal-actions">
 
+                    <button
+                        id="episodes-button"
+                        class="episodes-button"
+                        type="button"
+                    >
+                        📺 Ver episódios
+                    </button>
+
+                    <button
+                        id="modal-favorite-button"
+                        class="modal-favorite-button"
+                        type="button"
+                    >
+                        ♡ Favoritar
+                    </button>
+
+                </div>
             </div>
 
         </div>
     `;
 
+    // ============================================
+    // BOTÃO DE EPISÓDIOS
+    // ============================================
 
-    // Botão de episódios.
     const episodesButton =
-        document.getElementById(
-            "episodes-button"
-        );
+        document.getElementById("episodes-button");
 
     episodesButton.addEventListener(
         "click",
         function () {
-
             loadEpisodesView(
                 anime.id,
                 title
@@ -416,13 +541,34 @@ function openAnimeModal(anime) {
         }
     );
 
+    const modalFavoriteButton =
+    document.getElementById(
+        "modal-favorite-button"
+    );
+
+    updateFavoriteButton(
+        modalFavoriteButton,
+        anime.id
+    );
+
+    modalFavoriteButton.addEventListener(
+        "click",
+        function () {
+            toggleFavorite(anime);
+
+            updateFavoriteButton(
+                modalFavoriteButton,
+                anime.id
+            );
+        }
+    );
 
     modal.classList.remove("hidden");
 
     document.body.style.overflow =
         "hidden";
-}
 
+}
 
 // ============================================
 // FECHAR MODAL

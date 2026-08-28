@@ -3,80 +3,45 @@
    ============================================ */
 
 body.light-theme {
-    background: #f5f5f5;
-    color: #222;
-}
 
-body.light-theme .header {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: #ddd;
-}
+    /* ========================================
+       FUNDOS
+       ======================================== */
 
-body.light-theme .nav a {
-    color: #555;
-}
+    --color-background: #f5f5f7;
+    --color-background-secondary: #ededf1;
 
-body.light-theme .logo {
-    color: #222;
-}
+    --color-surface: #ffffff;
+    --color-surface-hover: #f0f0f5;
 
-body.light-theme .hero {
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(124, 58, 237, 0.12),
-            transparent 45%
-        );
-}
 
-body.light-theme .hero p {
-    color: #666;
-}
+    /* ========================================
+       TEXTOS
+       ======================================== */
 
-body.light-theme .search-box {
-    background: #fff;
-    border-color: #ddd;
-}
+    --color-text: #202024;
+    --color-text-secondary: #5f5f6b;
+    --color-text-muted: #858592;
 
-body.light-theme .search-box input {
-    color: #222;
-}
 
-body.light-theme .popular-section {
-    background: #eee;
-}
+    /* ========================================
+       BORDAS
+       ======================================== */
 
-body.light-theme .anime-card {
-    background: #fff;
-    border-color: #ddd;
-}
+    --color-border: #dcdce3;
 
-body.light-theme .anime-title {
-    color: #222;
-}
 
-body.light-theme .anime-meta {
-    color: #666;
-}
+    /* ========================================
+       INTERFACE
+       ======================================== */
 
-body.light-theme .anime-tag {
-    background: #eee;
-}
+    --header-background: rgba(255, 255, 255, 0.9);
 
-body.light-theme .modal-content {
-    background: #fff;
-    border-color: #ddd;
-}
+    --search-background: #ffffff;
 
-body.light-theme .modal-synopsis {
-    color: #555;
-}
+    --footer-background: #e7e7ec;
 
-body.light-theme .modal-details {
-    color: #333;
-}
+    --hero-glow: rgba(124, 58, 237, 0.10);
 
-body.light-theme .footer {
-    background: #eaeaea;
-    border-color: #ddd;
+    --primary-shadow: rgba(124, 58, 237, 0.12);
 }
