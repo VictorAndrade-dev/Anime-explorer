@@ -756,7 +756,7 @@ async function loadEpisodesView(
                         class="back-details-button"
                         type="button"
                     >
-                        ← Voltar aos detalhes
+                         Voltar aos detalhes
                     </button>
 
                     <div class="episodes-header">

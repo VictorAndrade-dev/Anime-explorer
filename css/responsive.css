@@ -79,6 +79,21 @@
         max-height: 90vh;
         overflow-y: auto;
     }
+
+
+    /* PAGINAÇÃO */
+
+    .pagination {
+        gap: 8px;
+    }
+
+    .pagination-button {
+        min-width: 105px;
+    }
+
+    .pagination-current {
+        min-width: 70px;
+    }
 }
 
 
@@ -181,20 +196,17 @@
     }
 
 
-   /* ========================================
-   PESQUISA
-   ======================================== */
+    /* ========================================
+       PESQUISA
+       ======================================== */
 
     .search-box {
         width: 100%;
         max-width: 100%;
-
         display: flex;
         flex-direction: row;
-
         gap: 6px;
         padding: 6px;
-
         border-radius: var(--border-radius-medium);
     }
 
@@ -202,29 +214,28 @@
         flex: 1;
         width: auto;
         min-width: 0;
-
         padding: 12px 12px;
-
         font-size: 0.9rem;
     }
 
     .search-box button {
         width: auto;
         min-height: 42px;
-
         padding: 0 14px;
-
         font-size: 0.85rem;
         white-space: nowrap;
     }
-    
+
+
     /* ========================================
        BTN ALEATÓRIO
        ======================================== */
-        .random-button {
+
+    .random-button {
         padding: 8px 12px;
         font-size: 0.8rem;
     }
+
 
     /* ========================================
        SEÇÕES
@@ -314,6 +325,37 @@
 
 
     /* ========================================
+       PAGINAÇÃO
+       ======================================== */
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        width: 100%;
+        margin: 25px 0 5px;
+    }
+
+    .pagination-button {
+        flex: 1;
+        min-width: 0;
+        height: 44px;
+        padding: 0 8px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .pagination-current {
+        flex: 0 0 auto;
+        min-width: 65px;
+        height: 44px;
+        padding: 0 9px;
+        font-size: 0.7rem;
+    }
+
+
+    /* ========================================
        FOOTER
        ======================================== */
 
@@ -365,15 +407,13 @@
         padding: 11px 9px;
     }
 
-    
-    /* ========================================
-       BTN ALEATÓRIO
-       ======================================== */
-     
-        .random-button {
-            padding: 7px 10px;
-            font-size: 0.75rem;
-        }
+
+    /* BTN ALEATÓRIO */
+
+    .random-button {
+        padding: 7px 10px;
+        font-size: 0.75rem;
+    }
 
 
     /* GRID */
@@ -394,4 +434,26 @@
     .favorite-button {
         font-size: 0.75rem;
     }
+
+
+    /* ========================================
+       PAGINAÇÃO - CELULAR PEQUENO
+       ======================================== */
+
+    .pagination {
+        gap: 5px;
+        margin-top: 20px;
+    }
+
+    .pagination-button {
+        padding: 0 6px;
+        font-size: 0.7rem;
+    }
+
+    .pagination-current {
+        min-width: 60px;
+        padding: 0 7px;
+        font-size: 0.68rem;
+    }
 }
+

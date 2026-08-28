@@ -1,3 +1,4 @@
+
 // ============================================
 // ELEMENTOS PRINCIPAIS
 // ============================================
@@ -22,6 +23,14 @@ const modalOverlay =
 
 
 // ============================================
+// PAGINAÇÃO DA PESQUISA
+// ============================================
+
+let currentPage = 1;
+let currentSearchTerm = "";
+
+
+// ============================================
 // PESQUISA
 // ============================================
 
@@ -35,69 +44,205 @@ searchForm.addEventListener(
             searchInput.value.trim();
 
         if (searchTerm === "") {
-
             showError(
                 "Digite o nome de um anime para pesquisar."
+            );
+            return;
+        }
+
+        // Nova pesquisa começa na primeira página.
+        currentPage = 1;
+        currentSearchTerm = searchTerm;
+
+        await performSearch();
+    }
+);
+
+
+// ============================================
+// EXECUTAR PESQUISA
+// ============================================
+
+async function performSearch() {
+
+    animeList.innerHTML = "";
+    resultsCount.textContent = "";
+
+    showLoading();
+
+    searchButton.disabled = true;
+
+    try {
+
+        const result =
+            await searchAnime(
+                currentSearchTerm,
+                {
+                    page: currentPage
+                }
+            );
+
+        const animes =
+            result.anime || [];
+
+        if (!animes || animes.length === 0) {
+
+            showError(
+                `Nenhum anime encontrado para "${currentSearchTerm}".`
             );
 
             return;
         }
 
-        animeList.innerHTML = "";
+        hideMessages();
 
-        resultsCount.textContent = "";
+        resultsCount.textContent =
+            `${animes.length} resultado(s) — Página ${currentPage}`;
 
-        showLoading();
+        // Cria os cards.
+        animes.forEach(
+            function (anime) {
 
-        searchButton.disabled = true;
-
-        try {
-
-            // A função está no arquivo api.js.
-            const animes =
-                await searchAnime(searchTerm);
-
-            if (!animes || animes.length === 0) {
-
-                showError(
-                    `Nenhum anime encontrado para "${searchTerm}".`
+                animeList.appendChild(
+                    createAnimeCard(anime)
                 );
 
-                return;
+            }
+        );
+
+        // Atualiza a paginação.
+        renderPagination(result);
+
+    } catch (error) {
+
+        console.error(
+            "Erro na pesquisa:",
+            error
+        );
+
+        showError(
+            "Não foi possível consultar os animes. " +
+            "Verifique sua conexão e tente novamente."
+        );
+
+    } finally {
+
+        searchButton.disabled = false;
+
+    }
+}
+
+
+// ============================================
+// PAGINAÇÃO
+// ============================================
+
+function renderPagination(result) {
+
+    // Remove paginação antiga.
+    const oldPagination =
+        document.getElementById("pagination");
+
+    if (oldPagination) {
+        oldPagination.remove();
+    }
+
+    // Cria o container.
+    const pagination =
+        document.createElement("div");
+
+    pagination.id = "pagination";
+    pagination.className = "pagination";
+
+    // Botão anterior.
+    const previousButton =
+        document.createElement("button");
+
+    previousButton.type = "button";
+    previousButton.className = "pagination-button";
+    previousButton.textContent = "‹ Anterior";
+
+    previousButton.disabled =
+        currentPage === 1;
+
+    previousButton.addEventListener(
+        "click",
+        function () {
+
+            if (currentPage > 1) {
+
+                currentPage--;
+
+                performSearch();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
             }
 
-            hideMessages();
-
-            resultsCount.textContent =
-                `${animes.length} resultado(s)`;
-
-            animes.forEach(
-                function (anime) {
-
-                    animeList.appendChild(
-                        createAnimeCard(anime)
-                    );
-                }
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Erro na pesquisa:",
-                error
-            );
-
-            showError(
-                "Não foi possível consultar os animes. " +
-                "Verifique sua conexão e tente novamente."
-            );
-
-        } finally {
-
-            searchButton.disabled = false;
         }
-    }
-);
+    );
+
+    pagination.appendChild(previousButton);
+
+
+    // Página atual.
+    const pageIndicator =
+        document.createElement("span");
+
+    pageIndicator.className =
+        "pagination-current";
+
+    pageIndicator.textContent =
+        `Página ${currentPage}`;
+
+    pagination.appendChild(pageIndicator);
+
+
+    // Botão próximo.
+    const nextButton =
+        document.createElement("button");
+
+    nextButton.type = "button";
+    nextButton.className = "pagination-button";
+    nextButton.textContent = "Próxima ›";
+
+    /*
+     * Se retornaram menos que SEARCH_LIMIT,
+     * provavelmente chegamos ao final.
+     */
+    nextButton.disabled =
+    (result.anime || []).length < SEARCH_LIMIT;
+    nextButton.addEventListener(
+        "click",
+        function () {
+
+            if (!nextButton.disabled) {
+
+                currentPage++;
+
+                performSearch();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }
+
+        }
+    );
+
+    pagination.appendChild(nextButton);
+
+
+    // Coloca depois dos cards.
+    animeList.parentElement.appendChild(
+        pagination
+    );
+}
 
 
 // ============================================
@@ -119,6 +264,7 @@ async function loadPopularAnime() {
                 popularList.appendChild(
                     createAnimeCard(anime)
                 );
+
             }
         );
 
@@ -147,7 +293,9 @@ async function loadRandomAnime() {
             await getRandomAnime();
 
         if (anime) {
+
             openAnimeModal(anime);
+
         }
 
     } catch (error) {
@@ -156,6 +304,7 @@ async function loadRandomAnime() {
             "Erro ao buscar anime aleatório:",
             error
         );
+
     }
 }
 
@@ -197,8 +346,11 @@ document.addEventListener(
     function (event) {
 
         if (event.key === "Escape") {
+
             closeModal();
+
         }
+
     }
 );
 
@@ -212,3 +364,4 @@ initializeTheme();
 loadPopularAnime();
 
 renderFavorites();
+

@@ -8,43 +8,50 @@
        CORES PRINCIPAIS
        ======================================== */
 
-    --color-background: #0f0f17;
-    --color-background-secondary: #151521;
+    --color-background: #0B0912;
+    --color-background-secondary: #100D19;
 
-    --color-surface: #1b1b29;
-    --color-surface-hover: #252538;
+    --color-surface: #15111F;
+    --color-surface-hover: #1D1829;
 
-    --color-primary: #7c3aed;
-    --color-primary-light: #a78bfa;
-    --color-primary-hover: #6d28d9;
+    --color-primary: #8B5CF6;
+    --color-primary-light: #A78BFA;
+    --color-primary-hover: #7C3AED;
+
+    /* ========================================
+       CORES DE DESTAQUE
+       ======================================== */
+
+    --color-accent: #C084FC;
+    --color-accent-light: #D8B4FE;
 
     /* ========================================
        TEXTOS
        ======================================== */
 
-    --color-text: #f5f5f5;
-    --color-text-secondary: #b4b4c4;
-    --color-text-muted: #77778c;
+    --color-text: #F5F3FF;
+    --color-text-secondary: #B9B3C9;
+    --color-text-muted: #777181;
 
     /* ========================================
        BORDAS
        ======================================== */
 
-    --color-border: #2d2d42;
+    --color-border: #2A2436;
 
     /* ========================================
        ELEMENTOS DA INTERFACE
        ======================================== */
 
-    --header-background: rgba(15, 15, 23, 0.9);
+    --header-background: rgba(11, 9, 18, 0.92);
 
-    --hero-glow: rgba(124, 58, 237, 0.18);
+    --hero-glow: rgba(139, 92, 246, 0.18);
 
-    --search-background: #191925;
+    --search-background: #15111F;
 
-    --primary-shadow: rgba(124, 58, 237, 0.15);
+    --primary-shadow: rgba(139, 92, 246, 0.18);
 
-    --footer-background: #0b0b11;
+    --footer-background: #08070D;
 
     /* ========================================
        TAMANHOS

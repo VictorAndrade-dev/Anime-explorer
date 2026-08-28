@@ -2,6 +2,9 @@
    RESET E CONFIGURAÇÕES GERAIS
    ============================================ */
 
+/*FONTE Inter*/   
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -13,8 +16,7 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
     background: var(--color-background);
     color: var(--color-text);
 
@@ -38,4 +40,33 @@ button {
 img {
     max-width: 100%;
     display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.logo,
+.nav a,
+.section-tag,
+.hero-tag,
+.random-button,
+.search-box button,
+.close-modal,
+.episodes-button,
+.modal-favorite-button,
+.load-more-episodes,
+.back-details-button {
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.2;
 }
