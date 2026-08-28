@@ -1,210 +1,47 @@
 /* ============================================
-   RESPONSIVIDADE - ANIME EXPLORER
+   RESPONSIVIDADE
    ============================================ */
 
-
-/* ============================================
-   TABLETS
-   ============================================ */
-
+/* TABLET */
 @media (max-width: 768px) {
-
-    /* Header */
 
     .header-content {
         height: auto;
         min-height: 70px;
-        padding: 15px 0;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .nav {
-        gap: 18px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-
-    /* Hero */
-
-    .hero {
-        min-height: 450px;
-        padding: 60px 0;
-    }
-
-    .hero h1 {
-        font-size: clamp(2.3rem, 8vw, 4rem);
-    }
-
-    .hero p {
-        font-size: 1rem;
-    }
-
-
-    /* Pesquisa */
-
-    .search-box {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .search-box button {
-        min-height: 48px;
-    }
-
-
-    /* Cabeçalho das seções */
-
-    .section-header {
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-
-    /* Modal */
-
-    .modal-content {
-        padding: 25px;
-    }
-
-    .modal-anime {
-        grid-template-columns: 180px 1fr;
+        padding: 12px 0;
         gap: 20px;
     }
 
-    .modal-info h2 {
-        font-size: 1.6rem;
+    .nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .theme-button {
+        padding: 7px 10px;
     }
 }
 
-
-/* ============================================
-   CELULARES
-   ============================================ */
-
+/* CELULAR */
 @media (max-width: 600px) {
 
-    /* Container */
-
-    .container {
-        width: 92%;
-    }
-
-
-    /* Header */
-
-    .logo {
-        font-size: 1.15rem;
+    .header-content {
+        flex-direction: column;
+        justify-content: center;
     }
 
     .nav {
+        width: 100%;
+        justify-content: center;
         gap: 12px;
+    }
+
+    .nav a {
         font-size: 0.9rem;
     }
 
-
-    /* Hero */
-
-    .hero {
-        min-height: 420px;
-        padding: 50px 0;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-
-    /* Seções */
-
-    .results-section,
-    .popular-section,
-    .favorites-section {
-        padding: 50px 0;
-    }
-
-    .section-header {
-        flex-direction: column;
-    }
-
-    .section-header h2 {
-        font-size: 1.7rem;
-    }
-
-
-    /* Cards */
-
-    .anime-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 15px;
-    }
-
-    .anime-info {
-        padding: 12px;
-    }
-
-    .anime-title {
-        font-size: 0.9rem;
-    }
-
-    .anime-meta {
-        font-size: 0.75rem;
-    }
-
-
-    /* Modal */
-
-    .modal {
-        padding: 10px;
-    }
-
-    .modal-content {
-        padding: 20px;
-        max-height: 95vh;
-    }
-
-    .modal-anime {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-image {
-        width: 180px;
-        margin: 0 auto;
-    }
-
-    .modal-info h2 {
-        font-size: 1.5rem;
-    }
-
-
-    /* Footer */
-
-    .footer {
-        padding: 30px 0;
-        font-size: 0.9rem;
-    }
-}
-
-
-/* ============================================
-   CELULARES PEQUENOS
-   ============================================ */
-
-@media (max-width: 400px) {
-
-    .anime-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .anime-image {
-        aspect-ratio: 2 / 3;
-    }
-
-    .nav {
-        flex-direction: column;
-        align-items: center;
+    .theme-button {
+        font-size: 0.8rem;
     }
 }
