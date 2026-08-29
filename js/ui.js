@@ -2,103 +2,133 @@
 // ELEMENTOS DA INTERFACE
 // ============================================
 
-const animeList =
-    document.getElementById("anime-list");
+const animeList = document.getElementById("anime-list");
 
-const popularList =
-    document.getElementById("popular-list");
+const popularList = document.getElementById("popular-list");
 
-const favoritesList =
-    document.getElementById("favorites-list");
+const favoritesList = document.getElementById("favorites-list");
 
-const emptyFavorites =
-    document.getElementById("empty-favorites");
+const emptyFavorites = document.getElementById("empty-favorites");
 
-const resultsCount =
-    document.getElementById("results-count");
+const resultsCount = document.getElementById("results-count");
 
-const initialMessage =
-    document.getElementById("initial-message");
+const initialMessage = document.getElementById("initial-message");
 
-const loadingMessage =
-    document.getElementById("loading");
+const loadingMessage = document.getElementById("loading");
 
-const errorMessage =
-    document.getElementById("error-message");
+const errorMessage = document.getElementById("error-message");
 
-const errorText =
-    document.getElementById("error-text");
+const errorText = document.getElementById("error-text");
 
-const modal =
-    document.getElementById("anime-modal");
+const modal = document.getElementById("anime-modal");
 
-const modalBody =
-    document.getElementById("modal-body");
+const modalBody = document.getElementById("modal-body");
 
-const themeButton =
-    document.getElementById("theme-button");
+const themeButton = document.getElementById("theme-button");
 
 // ============================================
 // TRADUÇÃO E PADRONIZAÇÃO DOS DADOS
 // ============================================
 
 function translateType(type) {
-    const types = {
-        tv: "Série",
-        movie: "Filme",
-        ova: "OVA",
-        ona: "ONA",
-        special: "Especial",
-        music: "Musical",
-        "tv_special": "Especial de TV"
-    };
+  const types = {
+    tv: "Série",
+    movie: "Filme",
+    ova: "OVA",
+    ona: "ONA",
+    special: "Especial",
+    music: "Musical",
+    tv_special: "Especial de TV",
+  };
 
-    return types[type] || "Não informado";
+  return types[type] || "Não informado";
 }
 
 function translateStatus(status) {
-    const statuses = {
-        finished: "Finalizado",
-        current: "Em lançamento",
-        upcoming: "Em breve",
-        tba: "A definir"
-    };
+  const statuses = {
+    finished: "Finalizado",
+    current: "Em lançamento",
+    upcoming: "Em breve",
+    tba: "A definir",
+  };
 
-    return statuses[status] || "Não informado";
+  return statuses[status] || "Não informado";
 }
 
 function formatScore(score) {
-    if (!score) {
-        return "Não informado";
-    }
+  if (!score) {
+    return "Não informado";
+  }
 
-    const numericScore = Number(score);
+  const numericScore = Number(score);
 
-    if (Number.isNaN(numericScore)) {
-        return "Não informado";
-    }
+  if (Number.isNaN(numericScore)) {
+    return "Não informado";
+  }
 
-    return (numericScore / 10).toFixed(1);
+  return (numericScore / 10).toFixed(1);
 }
 
 function formatYear(date) {
-    if (!date) {
-        return "Não informado";
-    }
+  if (!date) {
+    return "Não informado";
+  }
 
-    const year = new Date(date).getFullYear();
+  const year = new Date(date).getFullYear();
 
-    return Number.isNaN(year)
-        ? "Não informado"
-        : year;
+  return Number.isNaN(year) ? "Não informado" : year;
 }
 
 function formatEpisodes(episodes) {
-    if (!episodes) {
-        return "Não informado";
-    }
+  if (!episodes) {
+    return "Não informado";
+  }
 
-    return episodes;
+  return episodes;
+}
+
+function translateGenre(genre) {
+    const genres = {
+        "Action": "Ação",
+        "Adventure": "Aventura",
+        "Comedy": "Comédia",
+        "Drama": "Drama",
+        "Fantasy": "Fantasia",
+        "Horror": "Terror",
+        "Mystery": "Mistério",
+        "Romance": "Romance",
+        "Sci-Fi": "Ficção Científica",
+        "Slice of Life": "Cotidiano",
+        "Sports": "Esportes",
+        "Supernatural": "Sobrenatural",
+        "Thriller": "Suspense",
+        "Ecchi": "Ecchi",
+        "Hentai": "Hentai",
+        "Historical": "Histórico",
+        "Military": "Militar",
+        "Music": "Música",
+        "Psychological": "Psicológico",
+        "School": "Escolar",
+        "Space": "Espaço",
+        "Magic": "Magia",
+        "Mecha": "Mecha",
+        "Martial Arts": "Artes Marciais",
+        "Vampire": "Vampiros",
+        "Samurai": "Samurai",
+        "Cars": "Carros",
+        "Demons": "Demônios",
+        "Family": "Família",
+        "Kids": "Infantil",
+        "Parody": "Paródia",
+        "Shounen": "Shounen",
+        "Shoujo": "Shoujo",
+        "Josei": "Josei",
+        "Seinen": "Seinen",
+        "Yaoi": "Yaoi",
+        "Yuri": "Yuri"
+    };
+
+    return genres[genre] || genre;
 }
 
 // ============================================
@@ -106,16 +136,16 @@ function formatEpisodes(episodes) {
 // ============================================
 
 function formatTitle(anime) {
-    const attributes = anime.attributes || {};
+  const attributes = anime.attributes || {};
 
-    return (
-        attributes.titles?.pt_br ||
-        attributes.titles?.pt ||
-        attributes.titles?.en ||
-        attributes.titles?.en_jp ||
-        attributes.canonicalTitle ||
-        "Título não informado"
-    );
+  return (
+    attributes.titles?.pt_br ||
+    attributes.titles?.pt ||
+    attributes.titles?.en ||
+    attributes.titles?.en_jp ||
+    attributes.canonicalTitle ||
+    "Título não informado"
+  );
 }
 
 // ============================================
@@ -123,11 +153,11 @@ function formatTitle(anime) {
 // ============================================
 
 function formatDuration(duration) {
-    if (!duration) {
-        return "Não informado";
-    }
+  if (!duration) {
+    return "Não informado";
+  }
 
-    return `${duration} min`;
+  return `${duration} min`;
 }
 
 // ============================================
@@ -135,56 +165,39 @@ function formatDuration(duration) {
 // ============================================
 
 function createAnimeCard(anime) {
+  const card = document.createElement("article");
 
-    const card =
-        document.createElement("article");
+  card.classList.add("anime-card");
 
-    card.classList.add("anime-card");
+  const attributes = anime.attributes || {};
 
-    const attributes =
-        anime.attributes || {};
+  // Título do anime.
+  const title = formatTitle(anime);
 
-    // Título do anime.
-   const title = formatTitle(anime);
+  // Imagem.
+  const image =
+    attributes.posterImage?.large ||
+    attributes.posterImage?.medium ||
+    "https://via.placeholder.com/300x450?text=Sem+Imagem";
 
-    // Imagem.
-    const image =
-        attributes.posterImage?.large ||
-        attributes.posterImage?.medium ||
-        "https://via.placeholder.com/300x450?text=Sem+Imagem";
+  // Nota
+  const score = formatScore(attributes.averageRating);
 
-    // Nota    
-    const score = formatScore(
-        attributes.averageRating
-    );
+  // Episodios
+  const episodes = formatEpisodes(attributes.episodeCount);
 
-    // Episodios
-    const episodes = formatEpisodes(
-        attributes.episodeCount
-    );
+  //Ano Lançamento
+  const releaseDate = formatYear(attributes.startDate);
 
-    //Ano Lançamento
-    const releaseDate = formatYear(
-        attributes.startDate
-    );
+  const type = translateType(attributes.subtype);
 
-    const type = translateType(
-        attributes.subtype
-    );
+  const status = translateStatus(attributes.status);
 
-    const status = translateStatus(
-        attributes.status
-    );
+  const genres = anime.genres || [];
 
-    const genres =
-    attributes.genres || [];
-
-
-    // HTML do card.
-    card.innerHTML = `
-
+  // HTML do card.
+  card.innerHTML = `
         <div class="anime-image">
-
             <img
                 src="${image}"
                 alt="Capa do anime ${title}"
@@ -194,7 +207,6 @@ function createAnimeCard(anime) {
             <span class="anime-score">
                 ⭐ ${score}
             </span>
-
         </div>
 
         <div class="anime-info">
@@ -225,6 +237,14 @@ function createAnimeCard(anime) {
                     ${status}
                 </span>
 
+                ${genres.map(function (genre) {
+                return `
+                    <span class="anime-tag">
+                        ${translateGenre(genre)}
+                    </span>
+                    `;
+                }).join("")}
+
             </div>
 
             <button
@@ -237,150 +257,96 @@ function createAnimeCard(anime) {
         </div>
     `;
 
+  // ============================================
+  // FAVORITO
+  // ============================================
 
-    // ============================================
-    // FAVORITO
-    // ============================================
+  const favoriteButton = document.createElement("button");
 
-    const favoriteButton =
-        document.createElement("button");
+  favoriteButton.classList.add("favorite-button");
 
-    favoriteButton.classList.add(
-        "favorite-button"
-    );
+  favoriteButton.dataset.id = anime.id;
 
-    favoriteButton.dataset.id =
-        anime.id;
+  updateFavoriteButton(favoriteButton, anime.id);
 
-    updateFavoriteButton(
-        favoriteButton,
-        anime.id
-    );
+  favoriteButton.addEventListener("click", function (event) {
+    event.stopPropagation();
 
-    favoriteButton.addEventListener(
-        "click",
-        function (event) {
-            event.stopPropagation();
+    toggleFavorite(anime);
+  });
 
-            toggleFavorite(anime);
-        }
-    );
+  const animeInfo = card.querySelector(".anime-info");
 
-    const animeInfo =
-        card.querySelector(".anime-info");
+  animeInfo.appendChild(favoriteButton);
 
-    animeInfo.appendChild(
-        favoriteButton
-    );
+  // ============================================
+  // DETALHES
+  // ============================================
 
+  const detailsButton = card.querySelector(".details-button");
 
-    // ============================================
-    // DETALHES
-    // ============================================
+  card.addEventListener("click", function () {
+    openAnimeModal(anime);
+  });
 
-    const detailsButton =
-        card.querySelector(".details-button");
-
-        card.addEventListener(
-        "click",
-        function () {
-            openAnimeModal(anime);
-        }
-    );
-
-    return card;
+  return card;
 }
-
 
 // ============================================
 // ATUALIZAR BOTÃO DE FAVORITO
 // ============================================
 
 function updateFavoriteButton(button, animeId) {
+  if (isFavorite(animeId)) {
+    button.textContent = "♥ Favoritado";
 
-    if (isFavorite(animeId)) {
+    button.classList.add("favorited");
+  } else {
+    button.textContent = "♡ Favoritar";
 
-        button.textContent =
-            "♥ Favoritado";
-
-        button.classList.add(
-            "favorited"
-        );
-
-    } else {
-
-        button.textContent =
-            "♡ Favoritar";
-
-        button.classList.remove(
-            "favorited"
-        );
-    }
+    button.classList.remove("favorited");
+  }
 }
-
 
 // ============================================
 // ATUALIZAR TODOS OS BOTÕES
 // ============================================
 
 function updateFavoriteButtons() {
+  const buttons = document.querySelectorAll(".favorite-button");
 
-    const buttons =
-        document.querySelectorAll(
-            ".favorite-button"
-        );
-
-    buttons.forEach(
-        function (button) {
-
-            updateFavoriteButton(
-                button,
-                button.dataset.id
-            );
-        }
-    );
+  buttons.forEach(function (button) {
+    updateFavoriteButton(button, button.dataset.id);
+  });
 }
-
 
 // ============================================
 // RENDERIZAR FAVORITOS
 // ============================================
 
 function renderFavorites() {
+  if (!favoritesList) {
+    return;
+  }
 
-    if (!favoritesList) {
-        return;
-    }
+  favoritesList.innerHTML = "";
 
-    favoritesList.innerHTML = "";
-
-    if (favorites.length === 0) {
-
-        if (emptyFavorites) {
-            emptyFavorites.classList.remove(
-                "hidden"
-            );
-        }
-
-        return;
-    }
-
+  if (favorites.length === 0) {
     if (emptyFavorites) {
-        emptyFavorites.classList.add(
-            "hidden"
-        );
+      emptyFavorites.classList.remove("hidden");
     }
 
-    favorites.forEach(
-        function (anime) {
+    return;
+  }
 
-            favoritesList.appendChild(
-                createAnimeCard(anime)
-            );
-        }
-    );
+  if (emptyFavorites) {
+    emptyFavorites.classList.add("hidden");
+  }
+
+  favorites.forEach(function (anime) {
+    favoritesList.appendChild(createAnimeCard(anime));
+  });
 }
-
 
 // ============================================
 // MODAL
@@ -388,48 +354,39 @@ function renderFavorites() {
 
 let currentAnime = null;
 
-
 function openAnimeModal(anime) {
-    currentAnime = anime;
+  currentAnime = anime;
 
-    const attributes = anime.attributes || {};
+  const attributes = anime.attributes || {};
 
-    const title = formatTitle(anime);
+  const title = formatTitle(anime);
 
-    const image =
-        attributes.posterImage?.large ||
-        attributes.posterImage?.medium ||
-        "https://via.placeholder.com/300x450?text=Sem+Imagem";
+  const image =
+    attributes.posterImage?.large ||
+    attributes.posterImage?.medium ||
+    "https://via.placeholder.com/300x450?text=Sem+Imagem";
 
-    const synopsis =
-        attributes.synopsis ||
-        "Sinopse não disponível.";
+  const synopsis = attributes.synopsis || "Sinopse não disponível.";
 
-    const score = formatScore(
-        attributes.averageRating
-    );
+  const score = formatScore(attributes.averageRating);
 
-    const episodes = formatEpisodes(
-        attributes.episodeCount
-    );
+  const episodes = formatEpisodes(attributes.episodeCount);
 
-    const duration = formatDuration(
-        attributes.episodeLength
-    );
+  const duration = formatDuration(attributes.episodeLength);
 
-    const status = translateStatus(
-        attributes.status
-    );
+  const status = translateStatus(attributes.status);
 
-    const type = translateType(
-        attributes.subtype
-    );
+  const type = translateType(attributes.subtype);
 
-    const releaseDate = formatYear(
-        attributes.startDate
-    );
+  const genres = anime.genres || [];
 
-    modalBody.innerHTML = `
+  const translatedGenres = genres.map(function (genre) {
+    return translateGenre(genre);
+    });
+
+  const releaseDate = formatYear(attributes.startDate);
+
+  modalBody.innerHTML = `
         <div class="modal-anime">
 
             <div class="modal-poster">
@@ -500,9 +457,29 @@ function openAnimeModal(anime) {
                         </div>
                     </div>
 
-                </div>
+                    <div class="modal-detail modal-genres">
+                    <span>🎭</span>
 
-                <div class="modal-actions">
+                    <div>
+                        <small>Gêneros</small>
+
+                        <div class="modal-genre-tags">
+                            ${
+                                translatedGenres.length > 0
+                                    ? translatedGenres.map(function (genre) {
+                                        return `
+                                            <span class="anime-tag">
+                                                ${translateGenre(genre)}
+                                            </span>
+                                        `;
+                                    }).join("")
+                                    : "<span>Não informado</span>"
+                            }
+                        </div>
+                    </div>
+                </div>   
+
+                </div>
                    <div class="modal-actions">
 
                     <button
@@ -527,50 +504,29 @@ function openAnimeModal(anime) {
         </div>
     `;
 
-    // ============================================
-    // BOTÃO DE EPISÓDIOS
-    // ============================================
+  // ============================================
+  // BOTÃO DE EPISÓDIOS
+  // ============================================
 
-    const episodesButton =
-        document.getElementById("episodes-button");
+  const episodesButton = document.getElementById("episodes-button");
 
-    episodesButton.addEventListener(
-        "click",
-        function () {
-            loadEpisodesView(
-                anime.id,
-                title
-            );
-        }
-    );
+  episodesButton.addEventListener("click", function () {
+    loadEpisodesView(anime.id, title);
+  });
 
-    const modalFavoriteButton =
-    document.getElementById(
-        "modal-favorite-button"
-    );
+  const modalFavoriteButton = document.getElementById("modal-favorite-button");
 
-    updateFavoriteButton(
-        modalFavoriteButton,
-        anime.id
-    );
+  updateFavoriteButton(modalFavoriteButton, anime.id);
 
-    modalFavoriteButton.addEventListener(
-        "click",
-        function () {
-            toggleFavorite(anime);
+  modalFavoriteButton.addEventListener("click", function () {
+    toggleFavorite(anime);
 
-            updateFavoriteButton(
-                modalFavoriteButton,
-                anime.id
-            );
-        }
-    );
+    updateFavoriteButton(modalFavoriteButton, anime.id);
+  });
 
-    modal.classList.remove("hidden");
+  modal.classList.remove("hidden");
 
-    document.body.style.overflow =
-        "hidden";
-
+  document.body.style.overflow = "hidden";
 }
 
 // ============================================
@@ -578,63 +534,54 @@ function openAnimeModal(anime) {
 // ============================================
 
 function closeModal() {
+  modal.classList.add("hidden");
 
-    modal.classList.add("hidden");
-
-    document.body.style.overflow = "";
+  document.body.style.overflow = "";
 }
-
 
 // ============================================
 // MENSAGENS
 // ============================================
 
 function showLoading() {
-
-    initialMessage.classList.add("hidden");
-    errorMessage.classList.add("hidden");
-    loadingMessage.classList.remove("hidden");
+  initialMessage.classList.add("hidden");
+  errorMessage.classList.add("hidden");
+  loadingMessage.classList.remove("hidden");
 }
-
 
 function hideMessages() {
-
-    initialMessage.classList.add("hidden");
-    loadingMessage.classList.add("hidden");
-    errorMessage.classList.add("hidden");
+  initialMessage.classList.add("hidden");
+  loadingMessage.classList.add("hidden");
+  errorMessage.classList.add("hidden");
 }
-
 
 function showError(message) {
+  initialMessage.classList.add("hidden");
+  loadingMessage.classList.add("hidden");
 
-    initialMessage.classList.add("hidden");
-    loadingMessage.classList.add("hidden");
+  errorMessage.classList.remove("hidden");
 
-    errorMessage.classList.remove("hidden");
+  errorText.textContent = message;
 
-    errorText.textContent = message;
-
-    resultsCount.textContent = "";
+  resultsCount.textContent = "";
 }
-
 
 // ============================================
 // EPISÓDIOS
 // ============================================
 
 async function loadEpisodesView(
-    animeId,
-    animeTitle,
-    offset = 0,
-    append = false
+  animeId,
+  animeTitle,
+  offset = 0,
+  append = false,
 ) {
-
-    /*
-     * Primeira abertura:
-     * mostra o carregamento normalmente.
-     */
-    if (!append) {
-        modalBody.innerHTML = `
+  /*
+   * Primeira abertura:
+   * mostra o carregamento normalmente.
+   */
+  if (!append) {
+    modalBody.innerHTML = `
             <div class="message">
                 <span>⏳</span>
                 <h3>Carregando episódios...</h3>
@@ -643,26 +590,20 @@ async function loadEpisodesView(
                 </p>
             </div>
         `;
-    }
+  }
 
-    try {
+  try {
+    const result = await getEpisodes(animeId, offset, 20);
 
-        const result = await getEpisodes(
-            animeId,
-            offset,
-            20
-        );
+    const episodes = result.episodes;
+    const nextUrl = result.next;
 
-        const episodes = result.episodes;
-        const nextUrl = result.next;
-
-        /*
-         * Nenhum episódio encontrado.
-         */
-        if (!episodes || episodes.length === 0) {
-
-            if (!append) {
-                modalBody.innerHTML = `
+    /*
+     * Nenhum episódio encontrado.
+     */
+    if (!episodes || episodes.length === 0) {
+      if (!append) {
+        modalBody.innerHTML = `
                     <div class="message">
                         <span>📺</span>
 
@@ -675,83 +616,111 @@ async function loadEpisodesView(
                         </p>
                     </div>
                 `;
-            }
+      }
 
-            return;
-        }
+      return;
+    }
 
-        /*
-         * Cria os cards dos episódios.
-         */
-        const episodesHTML = episodes.map(
-            function (episode, index) {
+    /*
+     * Cria os cards dos episódios.
+     */
+const episodesHTML = episodes.map(
+    function (episode, index) {
 
-                const attributes =
-                    episode.attributes || {};
+        const attributes =
+            episode.attributes || {};
 
-                const number =
-                    attributes.number ||
-                    offset + index + 1;
+        const number =
+            attributes.number ||
+            offset + index + 1;
 
-                const episodeTitle =
-                    attributes.titles?.pt_br ||
-                    attributes.titles?.pt ||
-                    attributes.titles?.en ||
-                    attributes.canonicalTitle ||
-                    "Título não disponível";
+        const episodeTitle =
+            attributes.titles?.pt_br ||
+            attributes.titles?.pt ||
+            attributes.titles?.en ||
+            attributes.canonicalTitle ||
+            `Episódio ${number}`;
 
-                const airDate =
+        const airDate =
+            attributes.airdate
+                ? new Date(
                     attributes.airdate
-                        ? new Date(
-                            attributes.airdate
-                        ).toLocaleDateString(
-                            "pt-BR"
-                        )
-                        : "Data não disponível";
+                ).toLocaleDateString(
+                    "pt-BR"
+                )
+                : "Data não disponível";
 
-                const length =
-                    attributes.length
-                        ? `${attributes.length} min`
-                        : "Duração não disponível";
-
-                return `
-                    <article class="episode-card">
-
-                        <div class="episode-number">
-                            ${number}
-                        </div>
-
-                        <div class="episode-info">
-
-                            <h3>
-                                ${episodeTitle}
-                            </h3>
-
-                            <div class="episode-meta">
-
-                                <span>
-                                    📅 ${airDate}
-                                </span>
-
-                                <span>
-                                    ⏱️ ${length}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </article>
-                `;
-            }
-        ).join("");
+        const length =
+            attributes.length
+                ? `${attributes.length} min`
+                : "Duração não disponível";
 
         /*
-         * Primeira página.
+         * A Kitsu não fornece o vídeo do episódio.
+         *
+         * Por isso criamos uma busca externa
+         * para encontrar onde o anime está
+         * disponível legalmente.
          */
-        if (!append) {
 
-            modalBody.innerHTML = `
+        const searchTitle =
+            encodeURIComponent(
+                animeTitle
+            );
+
+        const watchUrl =
+            `https://www.justwatch.com/br/busca?q=${searchTitle}`;
+
+        return `
+            <article class="episode-card">
+
+                <div class="episode-number">
+                    ${number}
+                </div>
+
+                <div class="episode-info">
+
+                    <h3>
+                        ${episodeTitle}
+                    </h3>
+
+                    <div class="episode-meta">
+
+                        <span>
+                            📅 ${airDate}
+                        </span>
+
+                        <span>
+                            ⏱️ ${length}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="episode-actions">
+
+                    <a
+                        href="${watchUrl}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="watch-episode-button"
+                    >
+                        ▶️ Onde assistir
+                    </a>
+
+                </div>
+
+            </article>
+        `;
+    }
+).join("");
+
+    /*
+     * Primeira página.
+     */
+    if (!append) {
+      modalBody.innerHTML = `
                 <div class="episodes-container">
 
                     <button
@@ -786,8 +755,8 @@ async function loadEpisodesView(
                     </div>
 
                     ${
-                        nextUrl
-                            ? `
+                      nextUrl
+                        ? `
                                 <button
                                     id="load-more-episodes"
                                     class="load-more-episodes"
@@ -796,58 +765,42 @@ async function loadEpisodesView(
                                     ⬇️ Carregar mais episódios
                                 </button>
                               `
-                            : ""
+                        : ""
                     }
 
                 </div>
             `;
+    } else {
+      /*
+       * Próximos episódios:
+       * apenas adiciona os novos cards.
+       */
+      const episodesList = document.getElementById("episodes-list");
 
-        } else {
+      if (episodesList) {
+        episodesList.insertAdjacentHTML("beforeend", episodesHTML);
+      }
 
-            /*
-             * Próximos episódios:
-             * apenas adiciona os novos cards.
-             */
-            const episodesList =
-                document.getElementById(
-                    "episodes-list"
-                );
+      /*
+       * Remove o botão antigo.
+       */
+      const oldButton = document.getElementById("load-more-episodes");
 
-            if (episodesList) {
-                episodesList.insertAdjacentHTML(
-                    "beforeend",
-                    episodesHTML
-                );
-            }
+      if (oldButton) {
+        oldButton.remove();
+      }
 
-            /*
-             * Remove o botão antigo.
-             */
-            const oldButton =
-                document.getElementById(
-                    "load-more-episodes"
-                );
+      /*
+       * Adiciona novamente se ainda houver
+       * mais episódios.
+       */
+      if (nextUrl) {
+        const episodesList = document.getElementById("episodes-list");
 
-            if (oldButton) {
-                oldButton.remove();
-            }
-
-            /*
-             * Adiciona novamente se ainda houver
-             * mais episódios.
-             */
-            if (nextUrl) {
-
-                const episodesList =
-                    document.getElementById(
-                        "episodes-list"
-                    );
-
-                if (episodesList) {
-
-                    episodesList.insertAdjacentHTML(
-                        "afterend",
-                        `
+        if (episodesList) {
+          episodesList.insertAdjacentHTML(
+            "afterend",
+            `
                             <button
                                 id="load-more-episodes"
                                 class="load-more-episodes"
@@ -855,90 +808,52 @@ async function loadEpisodesView(
                             >
                                 ⬇️ Carregar mais episódios
                             </button>
-                        `
-                    );
-                }
-            }
+                        `,
+          );
         }
+      }
+    }
 
+    /*
+     * Botão voltar.
+     */
+    const backButton = document.getElementById("back-details");
+
+    if (backButton) {
+      backButton.addEventListener("click", function () {
+        openAnimeModal(currentAnime);
+      });
+    }
+
+    /*
+     * Botão carregar mais.
+     */
+    const loadMoreButton = document.getElementById("load-more-episodes");
+
+    if (loadMoreButton) {
+      loadMoreButton.addEventListener("click", async function () {
         /*
-         * Botão voltar.
+         * Evita cliques duplicados.
          */
-        const backButton =
-            document.getElementById(
-                "back-details"
-            );
+        loadMoreButton.disabled = true;
 
-        if (backButton) {
+        loadMoreButton.textContent = "⏳ Carregando...";
 
-            backButton.addEventListener(
-                "click",
-                function () {
+        try {
+          await loadEpisodesView(animeId, animeTitle, offset + 20, true);
+        } catch (error) {
+          console.error("Erro ao carregar mais episódios:", error);
 
-                    openAnimeModal(
-                        currentAnime
-                    );
+          loadMoreButton.disabled = false;
 
-                }
-            );
+          loadMoreButton.textContent = "⬇️ Tentar novamente";
         }
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao carregar episódios:", error);
 
-        /*
-         * Botão carregar mais.
-         */
-        const loadMoreButton =
-            document.getElementById(
-                "load-more-episodes"
-            );
-
-        if (loadMoreButton) {
-
-            loadMoreButton.addEventListener(
-                "click",
-                async function () {
-
-                    /*
-                     * Evita cliques duplicados.
-                     */
-                    loadMoreButton.disabled = true;
-
-                    loadMoreButton.textContent =
-                        "⏳ Carregando...";
-
-                    try {
-
-                        await loadEpisodesView(
-                            animeId,
-                            animeTitle,
-                            offset + 20,
-                            true
-                        );
-
-                    } catch (error) {
-
-                        console.error(
-                            "Erro ao carregar mais episódios:",
-                            error
-                        );
-
-                        loadMoreButton.disabled =
-                            false;
-
-                        loadMoreButton.textContent =
-                            "⬇️ Tentar novamente";
-                    }
-                }
-            );
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Erro ao carregar episódios:",
-            error
-        );
-
-        modalBody.innerHTML = `
+    modalBody.innerHTML = `
             <div class="message">
 
                 <span>😕</span>
@@ -961,62 +876,35 @@ async function loadEpisodesView(
 
             </div>
         `;
-    }
+  }
 }
-
 
 // ============================================
 // TEMA
 // ============================================
 
 function initializeTheme() {
+  const savedTheme = localStorage.getItem("animeTheme");
 
-    const savedTheme =
-        localStorage.getItem(
-            "animeTheme"
-        );
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
 
-    if (savedTheme === "light") {
-
-        document.body.classList.add(
-            "light-theme"
-        );
-
-        themeButton.textContent =
-            "🌙 Tema escuro";
-    }
+    themeButton.textContent = "🌙 Tema escuro";
+  }
 }
 
-
 function toggleTheme() {
+  document.body.classList.toggle("light-theme");
 
-    document.body.classList.toggle(
-        "light-theme"
-    );
+  const isLight = document.body.classList.contains("light-theme");
 
-    const isLight =
-        document.body.classList.contains(
-            "light-theme"
-        );
+  if (isLight) {
+    themeButton.textContent = "🌙 Tema escuro";
 
-    if (isLight) {
+    localStorage.setItem("animeTheme", "light");
+  } else {
+    themeButton.textContent = "☀️ Tema claro";
 
-        themeButton.textContent =
-            "🌙 Tema escuro";
-
-        localStorage.setItem(
-            "animeTheme",
-            "light"
-        );
-
-    } else {
-
-        themeButton.textContent =
-            "☀️ Tema claro";
-
-        localStorage.setItem(
-            "animeTheme",
-            "dark"
-        );
-    }
+    localStorage.setItem("animeTheme", "dark");
+  }
 }

@@ -6,7 +6,6 @@ const API_URL =
     "https://kitsu.io/api/edge/anime";
 
 const SEARCH_LIMIT = 15;
-
 const POPULAR_LIMIT = 6;
 
 
@@ -19,7 +18,7 @@ async function searchAnime(
     options = {}
 ) {
 
-        const {
+    const {
         page = 1,
         subtype = "",
         status = "",
@@ -50,7 +49,15 @@ async function searchAnime(
             new URLSearchParams();
 
 
+        // Incluir gêneros relacionados
+        params.append(
+            "include",
+            "genres"
+        );
+
+
         // Texto da pesquisa
+
         if (
             searchTerm &&
             searchTerm.trim()
@@ -65,6 +72,7 @@ async function searchAnime(
 
 
         // Tipo
+
         if (subtype) {
 
             params.append(
@@ -76,6 +84,7 @@ async function searchAnime(
 
 
         // Status
+
         if (status) {
 
             params.append(
@@ -85,7 +94,9 @@ async function searchAnime(
 
         }
 
+
         // Gênero
+
         if (genre) {
 
             params.append(
@@ -95,7 +106,9 @@ async function searchAnime(
 
         }
 
+
         // Ano
+
         if (year) {
 
             params.append(
@@ -107,6 +120,7 @@ async function searchAnime(
 
 
         // Ordenação
+
         if (sort) {
 
             params.append(
@@ -118,6 +132,7 @@ async function searchAnime(
 
 
         // Paginação da API
+
         params.append(
             "page[limit]",
             limitAPI
@@ -134,12 +149,15 @@ async function searchAnime(
 
 
         const response =
-            await fetch(url, {
-                headers: {
-                    Accept:
-                        "application/vnd.api+json"
+            await fetch(
+                url,
+                {
+                    headers: {
+                        Accept:
+                            "application/vnd.api+json"
+                    }
                 }
-            });
+            );
 
 
         if (!response.ok) {
@@ -155,7 +173,59 @@ async function searchAnime(
             await response.json();
 
 
-        return data.data || [];
+        // ========================================
+        // PROCESSAR GÊNEROS
+        // ========================================
+
+        const included =
+            data.included || [];
+
+
+        return (data.data || []).map(
+            function (anime) {
+
+                const genreReferences =
+                    anime.relationships
+                        ?.genres
+                        ?.data || [];
+
+
+                const genres =
+                    genreReferences
+                        .map(
+                            function (genreReference) {
+
+                                const genre =
+                                    included.find(
+                                        function (item) {
+
+                                            return (
+                                                item.type === "genres" &&
+                                                item.id === genreReference.id
+                                            );
+
+                                        }
+                                    );
+
+
+                                return (
+                                    genre
+                                        ?.attributes
+                                        ?.name || null
+                                );
+
+                            }
+                        )
+                        .filter(Boolean);
+
+
+                return {
+                    ...anime,
+                    genres: genres
+                };
+
+            }
+        );
 
     }
 
@@ -168,6 +238,7 @@ async function searchAnime(
 
 
     // Faz várias requisições.
+
     for (
         let offset = 0;
         offset < totalResultados;
@@ -179,12 +250,14 @@ async function searchAnime(
 
 
         // Adiciona os resultados.
+
         todosAnimes =
             todosAnimes.concat(parte);
 
 
         // Se retornou menos que 20,
         // não existem mais resultados.
+
         if (
             parte.length < limitAPI
         ) {
@@ -312,6 +385,12 @@ async function getPopularAnime() {
 
 
     params.append(
+        "include",
+        "genres"
+    );
+
+
+    params.append(
         "_",
         Date.now()
     );
@@ -348,10 +427,106 @@ async function getPopularAnime() {
         await response.json();
 
 
-    return data.data || [];
+    const included =
+        data.included || [];
+
+
+    return (data.data || []).map(
+        function (anime) {
+
+            const genreReferences =
+                anime.relationships
+                    ?.genres
+                    ?.data || [];
+
+
+            const genres =
+                genreReferences
+                    .map(
+                        function (genreReference) {
+
+                            const genre =
+                                included.find(
+                                    function (item) {
+
+                                        return (
+                                            item.type === "genres" &&
+                                            item.id === genreReference.id
+                                        );
+
+                                    }
+                                );
+
+
+                            return (
+                                genre
+                                    ?.attributes
+                                    ?.name || null
+                            );
+
+                        }
+                    )
+                    .filter(Boolean);
+
+
+            return {
+                ...anime,
+                genres: genres
+            };
+
+        }
+    );
 
 }
 
+// ============================================
+// BUSCAR ANIMES EM ALTA
+// ============================================
+
+async function getTrendingAnime() {
+
+    const params = new URLSearchParams();
+
+    params.append(
+        "sort",
+        "-userCount"
+    );
+
+    params.append(
+        "page[limit]",
+        12
+    );
+
+    params.append(
+        "_",
+        Date.now()
+    );
+
+    const url =
+        `${API_URL}?${params.toString()}`;
+
+    const response = await fetch(
+        url,
+        {
+            cache: "no-store",
+            headers: {
+                Accept:
+                    "application/vnd.api+json"
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Erro HTTP: ${response.status}`
+        );
+    }
+
+    const data =
+        await response.json();
+
+    return data.data || [];
+}
 
 // ============================================
 // BUSCAR ANIME ALEATÓRIO
@@ -388,6 +563,12 @@ async function getRandomAnime() {
 
 
     params.append(
+        "include",
+        "genres"
+    );
+
+
+    params.append(
         "_",
         Date.now()
     );
@@ -424,7 +605,58 @@ async function getRandomAnime() {
         await response.json();
 
 
-    return data.data?.[0] || null;
+    const anime =
+        data.data?.[0];
+
+
+    if (!anime) {
+        return null;
+    }
+
+
+    const included =
+        data.included || [];
+
+
+    const genreReferences =
+        anime.relationships
+            ?.genres
+            ?.data || [];
+
+
+    const genres =
+        genreReferences
+            .map(
+                function (genreReference) {
+
+                    const genre =
+                        included.find(
+                            function (item) {
+
+                                return (
+                                    item.type === "genres" &&
+                                    item.id === genreReference.id
+                                );
+
+                            }
+                        );
+
+
+                    return (
+                        genre
+                            ?.attributes
+                            ?.name || null
+                    );
+
+                }
+            )
+            .filter(Boolean);
+
+
+    return {
+        ...anime,
+        genres: genres
+    };
 
 }
 
@@ -499,4 +731,75 @@ async function getEpisodes(
 
     };
 
+}
+
+// ============================================
+// BUSCAR ANIMES DA TEMPORADA ATUAL
+// ============================================
+
+async function getCurrentSeasonAnime() {
+
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+
+    let season;
+
+    if (month >= 1 && month <= 3) {
+        season = "winter";
+    } else if (month >= 4 && month <= 6) {
+        season = "spring";
+    } else if (month >= 7 && month <= 9) {
+        season = "summer";
+    } else {
+        season = "fall";
+    }
+
+    const params = new URLSearchParams();
+
+    params.append(
+        "filter[seasonYear]",
+        year
+    );
+
+    params.append(
+        "filter[season]",
+        season
+    );
+
+    params.append(
+        "sort",
+        "-userCount"
+    );
+
+    params.append(
+        "page[limit]",
+        12
+    );
+
+    const url =
+        `${API_URL}?${params.toString()}`;
+
+    const response = await fetch(
+        url,
+        {
+            cache: "no-store",
+            headers: {
+                Accept:
+                    "application/vnd.api+json"
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Erro HTTP: ${response.status}`
+        );
+    }
+
+    const data =
+        await response.json();
+
+    return data.data || [];
 }
